@@ -4,8 +4,14 @@
 
 library(readr)
 Enrollment_dataset <- read_csv("dataset/public-vs-private-enrollment-county-2019.csv")
-Unemployment_dataset <- read.csv()
 
+
+```
+
+```{r importing_xl}
+library(readxl)
+Unemployment_dataset <- read_excel("dataset/Unemployment.xlsx", range = "A5:CN3201")
+FIPS_dataset <- read_excel("dataset/county_codes.xlsx")
 ```
 
 #Sorting it out using data summary techniques
@@ -15,6 +21,7 @@ Unemployment_dataset <- read.csv()
 library(reactable)
 reactable(Enrollment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
     onClick = "expand")
-        
+reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
+    onClick = "expand")
 ```
 #Making the change for you
