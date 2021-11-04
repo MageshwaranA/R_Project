@@ -1,0 +1,9 @@
+#Importing Public vs Private Enrollment County dataset
+
+```{r importing_csv}
+
+library(readr)
+Enrollment_dataset <- read_csv("dataset/public-vs-private-enrollment-county-2019.csv")
+
+```
+
