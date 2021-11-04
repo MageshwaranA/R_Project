@@ -7,3 +7,12 @@ Enrollment_dataset <- read_csv("dataset/public-vs-private-enrollment-county-2019
 
 ```
 
+#Sorting it out using data summary techniques
+
+```{r reactable_code}
+library(reactable)
+reactable(Enrollment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
+    onClick = "expand")
+        
+```
+
