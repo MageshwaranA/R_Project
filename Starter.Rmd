@@ -2,4 +2,10 @@
 
 #At first we will import all the dataset present at the "dataset" folder.
 
-#After importing the data we would filter it according to the relationship we would like to 
+#After importing the data we would filter it accordingly
+
+#We will use simple data visualization techniques to view the complex data models
+
+#Our entire thoughts on this analysis are put into picture with the help of an web application or shiny application
+
+#On doing this we would be able to identify the presence of a relation (if any) and also demonstrate our course learning objectives.
