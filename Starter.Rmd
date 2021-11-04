@@ -1,0 +1,5 @@
+#This markdown file is just a starter for the project where things are not organized, as all the rough analysis and data filtration things will happen over here.
+
+#At first we will import all the dataset present at the "dataset" folder.
+
+#After importing the data we would filter it according to the relationship we would like to 
