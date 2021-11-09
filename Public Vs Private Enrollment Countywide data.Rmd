@@ -1,10 +1,22 @@
 #Importing Public vs Private Enrollment County dataset
 
+```{r install_tidyverse}
+install.packages('tidyverse')
+library(tidyverse)
+```
+ 
 ```{r importing_csv}
 
 library(readr)
-Enrollment_dataset <- read_csv("dataset/public-vs-private-enrollment-county-2019.csv")
+Enrollment_dataset <- read_csv("dataset/public-vs-private-enrollment-county-2019.csv") 
 
+
+```
+
+```{r importing_xl}
+library(readxl)
+Unemployment_dataset <- read_excel("dataset/Unemployment.xlsx", range = "A5:CN3201")
+Education_dataset <- read_excel("dataset/Education.xlsx", range = "A5:AU3209")
 ```
 
 #Sorting it out using data summary techniques
@@ -14,6 +26,17 @@ Enrollment_dataset <- read_csv("dataset/public-vs-private-enrollment-county-2019
 library(reactable)
 reactable(Enrollment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
     onClick = "expand")
-        
+reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
+    onClick = "expand")
 ```
 #Making the change for you
+
+```{r income_tbl}
+income_table <- Unemployment_dataset %>%
+  select("FIPS_Code","Area_name","Median_Household_Income_2019")
+```
+
+```{r edu_tbl}
+edu_table <- Education_dataset %>%
+  select(c(1),c(3),c(44:47))
+```
