@@ -38,5 +38,36 @@ income_table <- Unemployment_dataset %>%
 
 ```{r edu_tbl}
 edu_table <- Education_dataset %>%
-  select(c(1),c(3),c(44:47))
+  select(c(1),c(3),c(44:47))%>%
+  rename("FIPS_Code" = "FIPS Code")%>%
+  rename("Percent_Bachelors" = c(6))
 ```
+
+```{r}
+inc_edu_state <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
+  select(-c(4))%>%
+  filter(endsWith(FIPS_Code,"000"))
+
+inc_edu_county <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
+  select(-c(4))%>%
+  filter(!endsWith(FIPS_Code,"000"))
+```
+
+Graphs and Linear Models:
+
+```{r income_edu_lin_model}
+ggplot(inc_edu_county,aes(Median_Household_Income_2019,Percent_Bachelors))+
+  geom_point()
+
+income_model <- lm(Median_Household_Income_2019~Percent_Bachelors,data=inc_edu_county)
+summary(income_model)
+```
+
+
+```{r map}
+#install.packages("rworldmap")
+#library(rworldmap)
+#mapped_data <- joinCountryData2Map(population_data, joinCode = "ISO3", 
+    #nameJoinColumn = "Country.Code")
+```
+
