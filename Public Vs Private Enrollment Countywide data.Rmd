@@ -1,20 +1,17 @@
-#Importing Public vs Private Enrollment County dataset
-
-```{r install_tidyverse}
-install.packages('tidyverse')
+#Loading the packages
+```{r}
 library(tidyverse)
-```
- 
-```{r importing_csv}
-
 library(readr)
+library(readxl)
+library(reactable)
+```
+
+```{r importing_csv}
 Enrollment_dataset <- read_csv("dataset/public-vs-private-enrollment-county-2019.csv") 
-
-
 ```
 
 ```{r importing_xl}
-library(readxl)
+
 Unemployment_dataset <- read_excel("dataset/Unemployment.xlsx", range = "A5:CN3201")
 Education_dataset <- read_excel("dataset/Education.xlsx", range = "A5:AU3209")
 ```
@@ -23,7 +20,7 @@ Education_dataset <- read_excel("dataset/Education.xlsx", range = "A5:AU3209")
 
 ```{r reactable_code}
 
-library(reactable)
+
 reactable(Enrollment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
     onClick = "expand")
 reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
@@ -63,7 +60,11 @@ income_model <- lm(Median_Household_Income_2019~Percent_Bachelors,data=inc_edu_c
 summary(income_model)
 ```
 
+```{r}
 
+```
+
+#US County Level Chloropleth Map
 ```{r map}
 #install.packages("rworldmap")
 #library(rworldmap)
