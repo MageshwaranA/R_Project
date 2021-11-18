@@ -1,5 +1,5 @@
 #Loading the packages
-```{r}
+```{r load_packages}
 library(tidyverse)
 library(readr)
 library(readxl)
@@ -36,8 +36,7 @@ income_table <- Unemployment_dataset %>%
 ```{r edu_tbl}
 edu_table <- Education_dataset %>%
   select(c(1),c(3),c(44:47))%>%
-  rename("FIPS_Code" = "FIPS Code")%>%
-  rename("Percent_Bachelors" = c(6))
+  rename("FIPS_Code" = c(1), "Area_name" = c(2), "Percent_No_Diploma" = c(3), "Percent_Diploma" = c(4), "Percent_Associates" = c(5),"Percent_Bachelors" = c(6))
 ```
 
 ```{r}
@@ -52,17 +51,29 @@ inc_edu_county <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
 
 Graphs and Linear Models:
 
-```{r income_edu_lin_model}
+```{r income_bach_lin_model}
 ggplot(inc_edu_county,aes(Median_Household_Income_2019,Percent_Bachelors))+
   geom_point()
 
-income_model <- lm(Median_Household_Income_2019~Percent_Bachelors,data=inc_edu_county)
-summary(income_model)
+income_bach_model <- lm(Median_Household_Income_2019~Percent_Bachelors,data=inc_edu_county)
+summary(income_bach_model)
+```
+
+```{r income_no_diploma}
+income_no_diploma_model <- lm(Median_Household_Income_2019~Percent_No_Diploma,data=inc_edu_county)
+summary(income_no_diploma_model)
+```
+
+```{r percent_bach_no_diploma}
+percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
+summary(percent_bach_no_diploma_model)
 ```
 
 ```{r}
-
+percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
+summary(percent_bach_no_diploma_model)
 ```
+
 
 #US County Level Chloropleth Map
 ```{r map}
