@@ -64,10 +64,45 @@ summary(income_model)
 ```
 
 
-```{r map}
-#install.packages("rworldmap")
-#library(rworldmap)
-#mapped_data <- joinCountryData2Map(population_data, joinCode = "ISO3", 
-    #nameJoinColumn = "Country.Code")
+```{r Comparing percentages (Magesh)}
+
+plot(inc_edu_county[, 3:7], main = "Correlation plot")
+
+par(mfrow = c(1, 1))
+
+```
+
+
+
+
+
+```{r State_Map Magesh}
+library(usmap)
+
+US_State <- map_data('state')
+
+ggplot(data=US_State, aes(x=long, y=lat, fill=region, group=group)) +
+  geom_polygon(color = "Black") +
+  guides(fill = FALSE)
+
+```
+
+
+```{r County_Map Magesh}
+library(usmap)
+
+US_county <- map_data('county')
+
+ggplot(data=US_county, aes(x=long, y=lat, fill=region, group=group)) +
+  geom_polygon(color = "Black") +
+  guides(fill = FALSE)
+
+```
+
+```{r Tryout Magesh}
+
+
+plot_usmap(regions = 'state',labels = TRUE)
+
 ```
 
