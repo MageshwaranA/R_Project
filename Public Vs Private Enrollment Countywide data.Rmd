@@ -99,10 +99,76 @@ ggplot(data=US_county, aes(x=long, y=lat, fill=region, group=group)) +
 
 ```
 
-```{r Tryout Magesh}
+```{r Statewise Cleaning}
 
 
-plot_usmap(regions = 'state',labels = TRUE)
+library (usmap)
+St_Pop <- inc_edu_state[order(inc_edu_state$Area_name),]
+St_Pop <- St_Pop[!(St_Pop$Area_name == "United States"),]
+St_Pop$fips <- statepop$fips
+St_Pop$abbr <- statepop$abbr
+
+St_Pop <- St_Pop %>% 
+  rename(Income = Median_Household_Income_2019) %>% 
+  rename(Less_than_High_School = `Percent of adults with less than a high school diploma, 2015-19`) %>% 
+  rename ( High_School_Only = `Percent of adults with a high school diploma only, 2015-19`) %>% 
+  rename(College_or_Associate = `Percent of adults completing some college or associate's degree, 2015-19`) %>% 
+  rename(Bachelors = Percent_Bachelors)
 
 ```
 
+```{r Statewise Income}
+
+plot_usmap(data = St_Pop,
+           values = "Income",
+           labels = TRUE) +
+  scale_fill_gradient(low = "red",
+                      high = 'green',
+                      name = NULL) +
+  ggtitle("Statewise Median Income (US,2019)") +
+  theme(plot.title = element_text(size = 15,
+                                  hjust = 0.5)) +
+  theme(legend.position = c(0.2,-0.1),
+        legend.direction = 'horizontal',
+        legend.key.width = unit(0.8,"in"),
+        legend.key.height = unit(0.2,"in"),
+        legend.text = element_text(size = 15))
+
+```
+
+```{r Statewise Less than high school}
+
+plot_usmap(data = St_Pop,
+           values = "Less_than_High_School",
+           labels = TRUE) +
+  scale_fill_gradient(low = "red",
+                      high = 'green',
+                      name = NULL) +
+  ggtitle("Statewise Less than High School") +
+  theme(plot.title = element_text(size = 15,
+                                  hjust = 0.5)) +
+  theme(legend.position = c(0.2,-0.1),
+        legend.direction = 'horizontal',
+        legend.key.width = unit(0.8,"in"),
+        legend.key.height = unit(0.2,"in"),
+        legend.text = element_text(size = 15))
+
+
+```
+
+```{r Statewise High School Only}
+
+plot_usmap(data = St_Pop,
+           values = "High_School_Only",
+           labels = TRUE) +
+  scale_fill_gradient(low = "red",
+                      high = 'green',
+                      name = NULL) +
+  ggtitle("Statewise High School Only") +
+  theme(plot.title = element_text(size = 15,
+                                  hjust = 0.5)) +
+  theme(legend.position = c(0.2,-0.1),
+        legend.direction = 'horizontal',
+        legend.key.width = unit(0.8,"in"),
+        legend.key.height = unit(0.2,"in"),
+        legend.text = element_text(size = 15))
