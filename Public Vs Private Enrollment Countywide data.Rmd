@@ -19,8 +19,6 @@ Education_dataset <- read_excel("dataset/Education.xlsx", range = "A5:AU3209")
 #Sorting it out using data summary techniques
 
 ```{r reactable_code}
-
-
 reactable(Enrollment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
     onClick = "expand")
 reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
@@ -75,11 +73,4 @@ summary(percent_bach_no_diploma_model)
 ```
 
 
-#US County Level Chloropleth Map
-```{r map}
-#install.packages("rworldmap")
-#library(rworldmap)
-#mapped_data <- joinCountryData2Map(population_data, joinCode = "ISO3", 
-    #nameJoinColumn = "Country.Code")
-```
 
