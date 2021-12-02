@@ -1,20 +1,17 @@
-#Importing Public vs Private Enrollment County dataset
-
-```{r install_tidyverse}
-install.packages('tidyverse')
+#Loading the packages
+```{r load_packages}
 library(tidyverse)
-```
- 
-```{r importing_csv}
-
 library(readr)
+library(readxl)
+library(reactable)
+```
+
+```{r importing_csv}
 Enrollment_dataset <- read_csv("dataset/public-vs-private-enrollment-county-2019.csv") 
-
-
 ```
 
 ```{r importing_xl}
-library(readxl)
+
 Unemployment_dataset <- read_excel("dataset/Unemployment.xlsx", range = "A5:CN3201")
 Education_dataset <- read_excel("dataset/Education.xlsx", range = "A5:AU3209")
 ```
@@ -23,7 +20,7 @@ Education_dataset <- read_excel("dataset/Education.xlsx", range = "A5:AU3209")
 
 ```{r reactable_code}
 
-library(reactable)
+
 reactable(Enrollment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
     onClick = "expand")
 reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
@@ -39,8 +36,7 @@ income_table <- Unemployment_dataset %>%
 ```{r edu_tbl}
 edu_table <- Education_dataset %>%
   select(c(1),c(3),c(44:47))%>%
-  rename("FIPS_Code" = "FIPS Code")%>%
-  rename("Percent_Bachelors" = c(6))
+  rename("FIPS_Code" = c(1), "Area_name" = c(2), "Percent_No_Diploma" = c(3), "Percent_Diploma" = c(4), "Percent_Associates" = c(5),"Percent_Bachelors" = c(6))
 ```
 
 ```{r}
@@ -55,14 +51,28 @@ inc_edu_county <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
 
 Graphs and Linear Models:
 
-```{r income_edu_lin_model}
+```{r income_bach_lin_model}
 ggplot(inc_edu_county,aes(Median_Household_Income_2019,Percent_Bachelors))+
   geom_point()
 
-income_model <- lm(Median_Household_Income_2019~Percent_Bachelors,data=inc_edu_county)
-summary(income_model)
+income_bach_model <- lm(Median_Household_Income_2019~Percent_Bachelors,data=inc_edu_county)
+summary(income_bach_model)
 ```
 
+```{r income_no_diploma}
+income_no_diploma_model <- lm(Median_Household_Income_2019~Percent_No_Diploma,data=inc_edu_county)
+summary(income_no_diploma_model)
+```
+
+```{r percent_bach_no_diploma}
+percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
+summary(percent_bach_no_diploma_model)
+```
+
+```{r}
+percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
+summary(percent_bach_no_diploma_model)
+```
 
 ```{r Comparing percentages (Magesh)}
 
@@ -191,6 +201,5 @@ plot_usmap(data = St_Pop,
         legend.key.width = unit(0.8,"in"),
         legend.key.height = unit(0.2,"in"),
         legend.text = element_text(size = 15))
-
 ```
 
