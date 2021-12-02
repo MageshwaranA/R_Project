@@ -1,2 +1,3 @@
 # R_Project
-In this project, we attempt to investigate is there a relation between poverty and enrollment to university
+In this project, we attempt to investigate a relation between Household Income and 
+students enrollment in universities
