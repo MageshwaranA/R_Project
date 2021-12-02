@@ -181,7 +181,7 @@ plot_usmap(data = St_Pop,
         legend.direction = 'horizontal',
         legend.key.width = unit(0.8,"in"),
         legend.key.height = unit(0.2,"in"),
-        legend.text = element_text(size = 15))
+        legend.text = element_text(size = 05))
 ```
 
 ```{r College_or_Associate}
