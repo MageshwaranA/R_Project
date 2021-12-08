@@ -37,43 +37,12 @@ inc_edu_county <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
   filter(!endsWith(FIPS_Code,"000"))
 ```
 
-Graphs and Linear Models:
-
-```{r income_bach_lin_model}
-ggplot(inc_edu_county,aes(Median_Household_Income_2019,Percent_No_Diploma))+
-  geom_point()
-ggplot(inc_edu_county,aes(Median_Household_Income_2019,Percent_Diploma))+
-  geom_point()
-ggplot(inc_edu_county,aes(Median_Household_Income_2019,Percent_Associates))+
-  geom_point()
-ggplot(inc_edu_county,aes(Median_Household_Income_2019,Percent_Bachelors))+
-  geom_point()
-
-
-income_bach_model <- lm(Median_Household_Income_2019~Percent_Bachelors,data=inc_edu_county)
-summary(income_bach_model)
-```
-
-```{r income_no_diploma}
-income_no_diploma_model <- lm(Median_Household_Income_2019~Percent_No_Diploma,data=inc_edu_county)
-summary(income_no_diploma_model)
-```
-
-```{r percent_bach_no_diploma}
-percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
-summary(percent_bach_no_diploma_model)
-```
-
-```{r}
-percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
-summary(percent_bach_no_diploma_model)
-```
 
 ```{r Comparing percentages (Magesh)}
 
-plot(inc_edu_county[, 3:7], main = "Correlation plot")
+Cplot <- plot(inc_edu_county[, 3:7], main = "Correlation plot")
 
-par(mfrow = c(1, 1))
+dframe <- par(mfrow = c(1, 1))
 
 ```
 
@@ -116,7 +85,7 @@ Ct_Pop <- Ct_Pop %>%
 
 ```{r Statewise Income}
 
-plot_usmap(data = St_Pop,
+Inc <- plot_usmap(data = St_Pop,
            values = "Income",
            labels = TRUE) +
   scale_fill_gradient(low = "red",
@@ -135,7 +104,7 @@ plot_usmap(data = St_Pop,
 
 ```{r Statewise Less than high school}
 
-plot_usmap(data = St_Pop,
+LHighSchool <- plot_usmap(data = St_Pop,
            values = "Less_than_High_School",
            labels = TRUE) +
   scale_fill_gradient(low = "red",
@@ -155,7 +124,7 @@ plot_usmap(data = St_Pop,
 
 ```{r Statewise High School Only}
 
-plot_usmap(data = St_Pop,
+HighSchool <- plot_usmap(data = St_Pop,
            values = "High_School_Only",
            labels = TRUE) +
   scale_fill_gradient(low = "red",
@@ -174,7 +143,7 @@ plot_usmap(data = St_Pop,
 ```{r College_or_Associate}
 
 
-plot_usmap(data = St_Pop,
+Associate <- plot_usmap(data = St_Pop,
            values = "College_or_Associate",
            labels = TRUE) +
   scale_fill_gradient(low = "red",

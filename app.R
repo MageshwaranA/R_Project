@@ -2,8 +2,17 @@ library(shiny)
 library(shinydashboard)
 library(DT)
 library(knitr)
+library(shinycssloaders)
 sidebar <- dashboardSidebar(
   sidebarMenu(
+    menuItem("Summary",
+             tabName = "summary",
+             icon = icon("lightbulb"),
+             startExpanded = FALSE,
+             menuSubItem("Project",
+                         tabName = "project"),
+             menuSubItem("Code",
+                         tabName = "code")),
     menuItem("Dataset",
              tabName = "dataset",
              icon = icon("database"),
@@ -22,21 +31,18 @@ sidebar <- dashboardSidebar(
              tabName = "graph",
              icon = icon("chart-bar"),
              startExpanded = FALSE,
-             menuSubItem("Correlation", tabName = "Corrmap"),
+             menuItem("Correlation", tabName = "Cmap",
+                      startExpanded = FALSE,
+                      menuSubItem("Dynamic Correlation",
+                                  tabName = "dcor"),
+                      menuSubItem("Fixed Correlation",
+                                  tabName = "Corrmap")),
              menuSubItem("Visual", tabName = "visual")
     ),
     menuItem("Model",
              tabName = "model",
              icon = icon("clipboard")
     ),
-    menuItem("Summary",
-             tabName = "summary",
-             icon = icon("lightbulb"),
-             startExpanded = FALSE,
-             menuSubItem("Code",
-                         tabName = "code"),
-             menuSubItem("Project",
-                         tabName = "project")),
     menuItem("About", tabName = "about", icon = icon("address-card"))
   )
 )
@@ -62,7 +68,7 @@ body <- dashboardBody(
               box(plotOutput("CorrMap"), width = 15)
             )
     ),
-    tabItem(tabName = "visual",
+    tabItem(tabName = "dcor",
             fluidPage(
               h1("Income vs Enrollment"),
               box(plotOutput("relation"), width = 15),
@@ -117,14 +123,28 @@ body <- dashboardBody(
               uiOutput("markdown")
               
   )
-)
+),
+  tabItem(tabName = "project",
+          fluidPage(
+            h2("Project Summary"),
+            textOutput("text")
+          )),
+tabItem(tabName = "model",
+        fluidPage(
+          h2("Linear Model"),
+          uiOutput("modelmarkdown")
+        )),
+tabItem(tabName = "about",
+        fluidPage(
+          h2("About the authors"),
+          textOutput("atext")
+        ))
 )
 )
 
 ui <- dashboardPage(
   dashboardHeader(
-    title = "Dashboard"
-  ),
+    title = "Dashboard"),
   sidebar,
   body
 )
@@ -137,13 +157,16 @@ server <- function(input, output) {
   output$markdown <- renderUI({
     HTML(markdown::markdownToHTML(knit("Public Vs Private Enrollment Countywide data.Rmd", quiet = TRUE)))
   })
+  output$modelmarkdown <- renderUI({
+    HTML(markdown::markdownToHTML(knit("Model.Rmd", quiet = TRUE)))
+  })  
   output$CorrMap <- renderPlot({
       plot(inc_edu_county[3:7])
   })
   output$relation <- renderPlot({
-    plot(aes(inc_edu_county$Median_Household_Income_2019,inc_edu_county[[input$education]],
-             xlab = Income,
-             ylab = income$education))
+    plot(inc_edu_county$Median_Household_Income_2019,inc_edu_county[[input$education]],
+             xlab = "Income",
+             ylab = input$education)
     
   })
   output$sstate <- renderPlot({
@@ -175,6 +198,13 @@ server <- function(input, output) {
                                       hjust = 0.5)) +
       theme(legend.position = "right",
             legend.text = element_text(size = 06))
+  })
+  output$text <- renderText({
+    paste("We will be investigating the effects of Income on the student enrollment.
+          a")
+  })
+  output$atext <- renderText({
+    paste("About the authors")
   })
 }
 

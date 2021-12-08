@@ -1,0 +1,22 @@
+```{r}
+
+income_bach_model <- lm(Median_Household_Income_2019~Percent_Bachelors,data=inc_edu_county)
+summary(income_bach_model)
+
+
+```
+
+```{r income_no_diploma}
+income_no_diploma_model <- lm(Median_Household_Income_2019~Percent_No_Diploma,data=inc_edu_county)
+summary(income_no_diploma_model)
+```
+
+```{r percent_bach_no_diploma}
+percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
+summary(percent_bach_no_diploma_model)
+```
+
+```{r}
+percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
+summary(percent_bach_no_diploma_model)
+```
