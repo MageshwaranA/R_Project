@@ -8,11 +8,8 @@ sidebar <- dashboardSidebar(
     menuItem("Summary",
              tabName = "summary",
              icon = icon("lightbulb"),
-             startExpanded = FALSE,
-             menuSubItem("Project",
-                         tabName = "project"),
-             menuSubItem("Code",
-                         tabName = "code")),
+             startExpanded = FALSE
+),
     menuItem("Dataset",
              tabName = "dataset",
              icon = icon("database"),
@@ -52,25 +49,29 @@ body <- dashboardBody(
     # First tab content
     tabItem(tabName = "income",
             fluidPage(
-              h1("Income"),
+              h1("Income",
+                 align = "center"),
               dataTableOutput("Incometable")
             )
     ),
     tabItem(tabName = "education",
             fluidPage(
-              h1("Education"),
+              h1("Education",
+                 align = "center"),
               dataTableOutput("Edutable")
             )
     ),
     tabItem(tabName = "Corrmap",
             fluidPage(
-              h1("Correlation Graph"),
+              h1("Correlation Graph",
+                 align = "center"),
               box(plotOutput("CorrMap"), width = 15)
             )
     ),
     tabItem(tabName = "dcor",
             fluidPage(
-              h1("Income vs Enrollment"),
+              h1("Income vs Enrollment",
+                 align = "center"),
               box(plotOutput("relation"), width = 15),
               box(
                 selectInput("education","Enrollment:",
@@ -86,7 +87,8 @@ body <- dashboardBody(
     tabItem(
       tabName = "state",
       fluidPage(
-        h1("Educational distribution"),
+        h1("Educational distribution",
+           align = "center"),
         box(plotOutput("sstate"),
             width = 15),
         box(
@@ -103,7 +105,8 @@ body <- dashboardBody(
     tabItem(
       tabName = "county",
       fluidPage(
-        h1("Educational distribution"),
+        h1("Educational distribution",
+           align = "center"),
         box(plotOutput("ccounty"),
             width = 15),
         box(
@@ -117,27 +120,40 @@ body <- dashboardBody(
         )
       )
     ),
-    tabItem(tabName = "code",
-            fluidPage(
-              h2("Code Walkthrough"),
-              uiOutput("markdown")
-              
-  )
-),
-  tabItem(tabName = "project",
+  tabItem(tabName = "summary",
           fluidPage(
-            h2("Project Summary"),
+            h2("Project Summary",
+               align = "center"),
+            img(src = "Summ.jpg",
+                height = 250,
+                width = 500,
+                style="display: block; margin-left: auto; margin-right: auto;"),
+            tags$br(),
             textOutput("text")
           )),
 tabItem(tabName = "model",
         fluidPage(
-          h2("Linear Model"),
+          h2("Linear Model",
+             align = "center"),
           uiOutput("modelmarkdown")
         )),
 tabItem(tabName = "about",
         fluidPage(
-          h2("About the authors"),
-          textOutput("atext")
+          h2("About the authors",
+             align = "center"),
+          h3("Mageshwaran Anbazhagan",
+             align = "left"),
+          textOutput("atext"),
+          tags$br(),
+          h3("Tyler Torren",
+             align = "left"),
+          textOutput("btext"),
+          tags$br(),
+          tags$br(),
+          h4("References",
+             align = "left"),
+          h6("https://penntoday.upenn.edu/sites/default/files/2021-03/tuition-free-college-social.jpg",
+             align = "left")
         ))
 )
 )
@@ -154,9 +170,6 @@ ui <- dashboardPage(
 server <- function(input, output) {
   output$Incometable <- renderDataTable(income_table)
   output$Edutable <- renderDataTable(edu_table)
-  output$markdown <- renderUI({
-    HTML(markdown::markdownToHTML(knit("Public Vs Private Enrollment Countywide data.Rmd", quiet = TRUE)))
-  })
   output$modelmarkdown <- renderUI({
     HTML(markdown::markdownToHTML(knit("Model.Rmd", quiet = TRUE)))
   })  
@@ -200,12 +213,22 @@ server <- function(input, output) {
             legend.text = element_text(size = 06))
   })
   output$text <- renderText({
-    paste("We will be investigating the effects of Income on the student enrollment.
-          a")
+    paste("We will be investigating the effects of Income on the student enrollment to different programs. We have imported relevant dataset to support our study, cleaned and organized the dataframe according to our preference to establish an relationship.
+          We have grouped the findings as per state and counties in the United States of America and visualized it through the use of plot_usmap function.
+          This plot shows the distribution percentage of student enrollment to different programs in a county or state.
+          Furthermore we have created correlation plot to identify the connection between income and programs enrolled, it is also made dynamic to make it easier to understand the link between two variables.
+          In addition to it, we have performed linear model to get a deeper knowledge on the relation.
+          We have put together all our findings in one place with the help of 'Shiny'.
+          We have used shiny dashboard to summarize our thoughts and process.")
   })
   output$atext <- renderText({
-    paste("About the authors")
+    paste("A fun loving super active personality who prefers outdoor than indoor.
+          Loves all kind of sporting activity and enjoys self time.")
   })
+  output$btext <- renderText({
+    paste("Needs to be updated")
+  })
+  
 }
 
 
