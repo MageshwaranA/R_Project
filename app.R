@@ -19,22 +19,22 @@ sidebar <- dashboardSidebar(
              ),
     menuItem("Map",
              tabName = "map",
-             icon = icon("map-pin"),
-             startExpanded = FALSE,
-             menuSubItem("State Level", tabName = "state"),
-             menuSubItem("County Level", tabName = "county")
+             icon = icon("map-pin")
     ),
     menuItem("Graph",
              tabName = "graph",
              icon = icon("chart-bar"),
              startExpanded = FALSE,
-             menuItem("Correlation", tabName = "Cmap",
-                      startExpanded = FALSE,
-                      menuSubItem("Dynamic Correlation",
-                                  tabName = "dcor"),
-                      menuSubItem("Fixed Correlation",
-                                  tabName = "Corrmap")),
-             menuSubItem("Visual", tabName = "visual")
+             menuItem("Correlation",
+                      tabName = "Corrmap"
+                      ),
+             menuItem("Visual",
+                         tabName = "visual",
+                         startExpanded = FALSE,
+                         menuSubItem(
+                           "Density",
+                           tabName = "density"
+                         ))
     ),
     menuItem("Model",
              tabName = "model",
@@ -49,45 +49,45 @@ body <- dashboardBody(
     # First tab content
     tabItem(tabName = "income",
             fluidPage(
-              h1("Income",
+              h1(strong("Income"),
                  align = "center"),
               dataTableOutput("Incometable")
             )
     ),
     tabItem(tabName = "education",
             fluidPage(
-              h1("Education",
+              h1(strong("Education"),
                  align = "center"),
               dataTableOutput("Edutable")
             )
     ),
     tabItem(tabName = "Corrmap",
             fluidPage(
-              h1("Correlation Graph",
+              h1(strong("Correlation Graph"),
                  align = "center"),
               box(plotOutput("CorrMap"), width = 15)
             )
     ),
-    tabItem(tabName = "dcor",
+    tabItem(tabName = "density",
             fluidPage(
-              h1("Income vs Enrollment",
+              h1(strong("Income vs Enrollment"),
                  align = "center"),
               box(plotOutput("relation"), width = 15),
               box(
                 selectInput("education","Enrollment:",
-                            c("Percent_No_Diploma",
-                              "Percent_Diploma",
-                              "Percent_Associates",
-                              "Percent_Bachelors"),
+                            c("Less_than_High_School",
+                              "High_School_Only",
+                              "College_or_Associate",
+                              "Bachelors"),
                             width = 500,
                 )
-              )
+              ),
             )
     ),
     tabItem(
-      tabName = "state",
+      tabName = "map",
       fluidPage(
-        h1("Educational distribution",
+        h1(strong("Educational distribution"),
            align = "center"),
         box(plotOutput("sstate"),
             width = 15),
@@ -99,30 +99,19 @@ body <- dashboardBody(
                         "Bachelors"),
                       width = 500,
           )
-        )
-      )
-    ),
-    tabItem(
-      tabName = "county",
-      fluidPage(
-        h1("Educational distribution",
-           align = "center"),
-        box(plotOutput("ccounty"),
-            width = 15),
+        ),
         box(
-          selectInput("column","Qualification:",
-                      c("Less_than_High_School",
-                        "High_School_Only",
-                        "College_or_Associate",
-                        "Bachelors"),
+          selectInput("geography","Geography:",
+                      c("State",
+                        "County"),
                       width = 500,
-          )
+                      )
         )
       )
     ),
   tabItem(tabName = "summary",
           fluidPage(
-            h2("Project Summary",
+            h1(strong("Project Summary"),
                align = "center"),
             img(src = "Summ.jpg",
                 height = 250,
@@ -133,14 +122,15 @@ body <- dashboardBody(
           )),
 tabItem(tabName = "model",
         fluidPage(
-          h2("Linear Model",
+          h1(strong("Linear Model"),
              align = "center"),
           uiOutput("modelmarkdown")
         )),
 tabItem(tabName = "about",
         fluidPage(
-          h2("About the authors",
+          h1(strong("About the authors"),
              align = "center"),
+          tags$br(),
           h3("Mageshwaran Anbazhagan",
              align = "left"),
           textOutput("atext"),
@@ -152,7 +142,9 @@ tabItem(tabName = "about",
           tags$br(),
           h4("References",
              align = "left"),
-          h6("https://penntoday.upenn.edu/sites/default/files/2021-03/tuition-free-college-social.jpg",
+          h6(em(tags$a(href = "Insidehighered.com","Insidehighered.com")),
+             align = "left"),
+          h6(em(tags$a(href = "https://www.ers.usda.gov/data-products/county-level-data-sets/","www.ers.usda.gov")),
              align = "left")
         ))
 )
@@ -177,32 +169,51 @@ server <- function(input, output) {
       plot(inc_edu_county[3:7])
   })
   output$relation <- renderPlot({
-    plot(inc_edu_county$Median_Household_Income_2019,inc_edu_county[[input$education]],
-             xlab = "Income",
-             ylab = input$education)
-    
+    yvar <- input$education
+      ggplot(Ct_Pop,
+           aes(x = Ct_Pop$Income, y = Ct_Pop[[yvar]])) +
+      geom_hex(bins = 70) +
+      scale_fill_continuous(type = "viridis") +
+      theme_bw()
+      
   })
   output$sstate <- renderPlot({
-    plot_usmap(data = St_Pop,
-               values = input$columns,
-               labels = TRUE) +
+    if (input$geography == "State")
+      plot_usmap(data = St_Pop,
+                values = input$columns,
+                labels = TRUE) +
+        scale_fill_gradient(low = "red",
+                            high = "green",
+                            name = "Percentage%",
+                            label = scales::comma,
+                            limits = c(0,100)) +
+        ggtitle(input$columns) +
+        theme(plot.title = element_text(size = 15,
+                                        hjust = 0.5)) +
+        theme(legend.position = "right",
+              legend.text = element_text(size = 06))
+    else
+      plot_usmap(data = Ct_Pop,
+                 values = input$columns,
+                 labels = TRUE) +
       scale_fill_gradient(low = "red",
-                          high = 'green',
+                          high = "green",
                           name = "Percentage%",
                           label = scales::comma,
                           limits = c(0,100)) +
-      ggtitle(input$columns) +
+      ggtitle(input$column) +
       theme(plot.title = element_text(size = 15,
                                       hjust = 0.5)) +
       theme(legend.position = "right",
             legend.text = element_text(size = 06))
+      
   })
   output$ccounty <- renderPlot({
     plot_usmap(data = Ct_Pop,
                values = input$column,
                labels = TRUE) +
       scale_fill_gradient(low = "red",
-                          high = 'green',
+                          high = "green",
                           name = "Percentage%",
                           label = scales::comma,
                           limits = c(0,100)) +

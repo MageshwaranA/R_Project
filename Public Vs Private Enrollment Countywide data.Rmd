@@ -159,3 +159,11 @@ Associate <- plot_usmap(data = St_Pop,
         legend.text = element_text(size = 15))
 ```
 
+```{r}
+
+ggplot(Ct_Pop, aes(x=Income, y=Less_than_High_School) ) +
+  geom_hex(bins = 70) +
+  scale_fill_continuous(type = "viridis") +
+  theme_bw()
+```
+
