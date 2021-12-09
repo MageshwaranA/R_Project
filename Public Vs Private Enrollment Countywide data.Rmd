@@ -43,6 +43,7 @@ Population_dataset <- read_excel("dataset/PopulationEstimates.xlsx", range = "A2
 Poverty_dataset <- read_excel("dataset/PovertyEstimates.xls", range = "A5:AB3198")
 ```
 
+<<<<<<< HEAD
 #Sorting it out using data summary techniques
 
 ```{r reactable_code}
@@ -54,6 +55,9 @@ reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE,
 #Making the change for you
 
 ```{r tidy_tables}
+=======
+```{r income_tbl}
+>>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
 income_table <- Unemployment_dataset %>%
   select("FIPS_Code","Area_name","Median_Household_Income_2019")
 
@@ -87,6 +91,7 @@ inc_edu_county <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
   filter(!endsWith(FIPS_Code,"000"))
 ```
 
+<<<<<<< HEAD
 Full Tables:
 
 ```{r join_county_tables}
@@ -192,6 +197,8 @@ summary(percent_bach_no_diploma_model)
 percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
 summary(percent_bach_no_diploma_model)
 ```
+=======
+>>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
 
 
 Multiple Linear Regression Models:
@@ -210,40 +217,18 @@ densityPlot(inc_edu_county$Percent_Bachelors, "Density Plot", "Percent Bachelors
 
 ```{r Comparing percentages (Magesh)}
 
+<<<<<<< HEAD
 #<<<<<<< HEAD
 #=======
 plot(inc_edu_county[, 3:7], main = "Correlation plot")
+=======
+Cplot <- plot(inc_edu_county[, 3:7], main = "Correlation plot")
+>>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
 
-par(mfrow = c(1, 1))
-
-```
-
-
-
-
-
-```{r State_Map Magesh}
-library(usmap)
-
-US_State <- map_data('state')
-
-ggplot(data=US_State, aes(x=long, y=lat, fill=region, group=group)) +
-  geom_polygon(color = "Black") +
-  guides(fill = FALSE)
+dframe <- par(mfrow = c(1, 1))
 
 ```
 
-
-```{r County_Map Magesh}
-library(usmap)
-
-US_county <- map_data('county')
-
-ggplot(data=US_county, aes(x=long, y=lat, fill=region, group=group)) +
-  geom_polygon(color = "Black") +
-  guides(fill = FALSE)
-
-```
 
 ```{r Statewise Cleaning}
 
@@ -256,16 +241,34 @@ St_Pop$abbr <- statepop$abbr
 
 St_Pop <- St_Pop %>% 
   rename(Income = Median_Household_Income_2019) %>% 
-  rename(Less_than_High_School = `Percent of adults with less than a high school diploma, 2015-19`) %>% 
-  rename ( High_School_Only = `Percent of adults with a high school diploma only, 2015-19`) %>% 
-  rename(College_or_Associate = `Percent of adults completing some college or associate's degree, 2015-19`) %>% 
-  rename(Bachelors = Percent_Bachelors)
+  rename(Less_than_High_School = `Percent_No_Diploma`) %>% 
+  rename ( High_School_Only = `Percent_Diploma`) %>% 
+  rename(College_or_Associate = `Percent_Associates`) %>% 
+  rename(Bachelors = `Percent_Bachelors`)
+
+```
+
+```{r Countywise Cleaning}
+#anti_join(countypop, Ct_Pop, by = "fips")
+Ct_Pop <- inc_edu_county[order(inc_edu_county$Area_name),]
+Ct_Pop <- Ct_Pop[order(Ct_Pop$FIPS_Code),]
+Ct_Pop <- na.omit(Ct_Pop)
+temp1 <- countypop
+temp2 <- temp1[!(temp1$fips == "15005"),]
+Ct_Pop$fips <- temp2$fips
+Ct_Pop$abbr <- temp2$abbr
+Ct_Pop <- Ct_Pop %>% 
+  rename(Income = Median_Household_Income_2019) %>% 
+  rename(Less_than_High_School = `Percent_No_Diploma`) %>% 
+  rename ( High_School_Only = `Percent_Diploma`) %>% 
+  rename(College_or_Associate = `Percent_Associates`) %>% 
+  rename(Bachelors = `Percent_Bachelors`)
 
 ```
 
 ```{r Statewise Income}
 
-plot_usmap(data = St_Pop,
+Inc <- plot_usmap(data = St_Pop,
            values = "Income",
            labels = TRUE) +
   scale_fill_gradient(low = "red",
@@ -284,7 +287,7 @@ plot_usmap(data = St_Pop,
 
 ```{r Statewise Less than high school}
 
-plot_usmap(data = St_Pop,
+LHighSchool <- plot_usmap(data = St_Pop,
            values = "Less_than_High_School",
            labels = TRUE) +
   scale_fill_gradient(low = "red",
@@ -304,7 +307,7 @@ plot_usmap(data = St_Pop,
 
 ```{r Statewise High School Only}
 
-plot_usmap(data = St_Pop,
+HighSchool <- plot_usmap(data = St_Pop,
            values = "High_School_Only",
            labels = TRUE) +
   scale_fill_gradient(low = "red",
@@ -317,13 +320,13 @@ plot_usmap(data = St_Pop,
         legend.direction = 'horizontal',
         legend.key.width = unit(0.8,"in"),
         legend.key.height = unit(0.2,"in"),
-        legend.text = element_text(size = 15))
+        legend.text = element_text(size = 05))
 ```
 
 ```{r College_or_Associate}
 
 
-plot_usmap(data = St_Pop,
+Associate <- plot_usmap(data = St_Pop,
            values = "College_or_Associate",
            labels = TRUE) +
   scale_fill_gradient(low = "red",
