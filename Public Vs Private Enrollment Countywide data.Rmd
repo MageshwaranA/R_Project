@@ -7,42 +7,6 @@ library(reactable)
 library(scales)
 ```
 
-```{r functions}
-densityPlot = function(x_var, plot_name, x_name){
-  x <- na.omit(x)
-  hist(x_var, col = "red", border = "black", prob = TRUE, main = plot_name, xlab = x_name)
-  lines(density(x_var), col = "blue", lwd = 2)
-}
-
-bach_point = function(x_var){
-  ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
-  geom_point()
-}
-
-bach_smooth = function(x_var){
-  ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
-  geom_smooth()
-}
-
-bach_boxplot = function(x_var){
-  ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
-  geom_boxplot()
-}
-
-urb_col <- function(y_var){
-  ggplot(grouped_by_urban_class, aes(Rural_urban_code,y_var,fill = Rural_urban_code))+
-  geom_col()+
-  theme(legend.position = "none")
-}
-
-  
-
-```
-
-
-#Enrollment_dataset <- #read_csv("dataset/public-vs-private-enrollment-county-2019.csv") 
-
-
 ```{r importing_xl}
 Unemployment_dataset <- read_excel("dataset/Unemployment.xlsx", range = "A5:CN3201")
 Education_dataset <- read_excel("dataset/Education.xlsx", range = "A5:AU3209")
@@ -52,6 +16,7 @@ Poverty_dataset <- read_excel("dataset/PovertyEstimates.xls", range = "A5:AB3198
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 #Sorting it out using data summary techniques
 
 ```{r reactable_code}
@@ -59,6 +24,9 @@ reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE,
     onClick = "expand")
 ```
 #Making the change for you
+=======
+#Tidying the tables
+>>>>>>> 15bb89b599258dc665d595d285853892713b39b0
 
 ```{r tidy_tables}
 income_table <- Unemployment_dataset %>%
@@ -79,11 +47,7 @@ pov_table <- Poverty_dataset%>%
 
 ```
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 9361c08845fa3c705740d6df8d8a45681db5eebc
-Merged Tables:
+#Merged Tables
 
 ```{r merged_tables}
 inc_edu_state <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
@@ -111,162 +75,9 @@ full_state_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"
   select(-c(8))
 
 ```
-County Table Grouped By Urban Classification
 
-```{r group_by_urb}
-bach_urban_class <- full_county_table %>%
-group_by(Rural_urban_code)%>%
-  summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))
+#Graphs
 
-<<<<<<< HEAD
-no_diploma_urban_class <- full_county_table %>%
-group_by(Rural_urban_code)%>%
-  summarise_at(vars(Percent_No_Diploma),funs(mean(Percent_No_Diploma)))
-
-diploma_urban_class <- full_county_table %>%
-group_by(Rural_urban_code)%>%
-  summarise_at(vars(Percent_Diploma),funs(mean(Percent_Diploma)))
-
-assoc_urban_class <- full_county_table %>%
-group_by(Rural_urban_code)%>%
-  summarise_at(vars(Percent_Associates),funs(mean(Percent_Associates)))
-
-group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_urban_code"),
-  list(no_diploma_urban_class, diploma_urban_class, assoc_urban_class, bach_urban_class))
-
-```
-
-=======
->>>>>>> 9361c08845fa3c705740d6df8d8a45681db5eebc
-Graphs:
-
-```{r graphs}
-
-bach_point(full_county_table$Median_Household_Income_2019)
-bach_smooth(full_county_table$Median_Household_Income_2019)
-
-bach_point(full_county_table$avg_decade_growth_rate)
-bach_smooth(full_county_table$avg_decade_growth_rate)
-
-bach_point(full_county_table$Percent_Poverty)
-bach_smooth(full_county_table$Percent_Poverty)
-
-bach_boxplot(full_county_table$Rural_urban_code)
-
-```
-
-<<<<<<< HEAD
-```{r bach_graphs_no_func}
-ggplot(full_county_table,aes(Median_Household_Income_2019,Percent_Bachelors))+
-geom_point()
-
-ggplot(full_county_table,aes(Median_Household_Income_2019,Percent_Bachelors))+
-geom_smooth()
-
-ggplot(full_county_table,aes(avg_decade_growth_rate,Percent_Bachelors))+
-geom_point()
-
-ggplot(full_county_table,aes(avg_decade_growth_rate,Percent_Bachelors))+
-geom_smooth()
-
-ggplot(full_county_table,aes(Percent_Poverty,Percent_Bachelors))+
-geom_point()
-
-ggplot(full_county_table,aes(Percent_Poverty,Percent_Bachelors))+
-geom_smooth()
-
-bach_boxplot(full_county_table$Rural_urban_code)
-
-```
-
-```{r group_by_urb_graphs}
-ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_No_Diploma,fill = Rural_urban_code))+
-  geom_col()+
-  theme(legend.position = "none")
-
-ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Diploma,fill = Rural_urban_code))+
-  geom_col()+
-  theme(legend.position = "none")
-
-ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Associates,fill = Rural_urban_code))+
-  geom_col()+
-  theme(legend.position = "none")
-
-ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
-  geom_col()+
-  theme(legend.position = "none")
-```
-
-
-Model Matrix:
-
-```{r}
-model.matrix(Percent_Bachelors~Rural_urban_code,data=full_county_table)
-```
-
-
-Linear Regression Models:
-
-```{r lin_models}
-income_model <- lm(Percent_Bachelors~Median_Household_Income_2019,data=full_county_table)
-summary(income_model)
-
-growth_model <- lm(Percent_Bachelors~avg_decade_growth_rate,data=full_county_table)
-summary(growth_model)
-
-poverty_model <- lm(Percent_Bachelors~Percent_Poverty,data=full_county_table)
-summary(poverty_model)
-
-```
-
-The greatest single indicator of county-level education that we examined is median income. According to the linear model I created, median income accounts for 50.76% of the variation among counties in percentage of people receiving a bachelors degree. 
-
-
-```{r lin_models_diploma}
-income_no_diploma_model <- lm(Median_Household_Income_2019~Percent_No_Diploma,data=inc_edu_county)
-summary(income_no_diploma_model)
-
-percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
-summary(percent_bach_no_diploma_model)
-
-percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
-summary(percent_bach_no_diploma_model)
-```
-=======
->>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
-
-
-Multiple Linear Regression Models:
-
-```{r multi_models}
-multi_model <- lm(Percent_Bachelors~Median_Household_Income_2019+avg_decade_growth_rate+Percent_Poverty,data=full_county_table)
-summary(multi_model)
-
-```
-
-```{r density_plot_bach}
-densityPlot(inc_edu_county$Percent_Bachelors, "Density Plot", "Percent Bachelors")
-```
-
-####################################################################################
-
-```{r Comparing percentages (Magesh)}
-
-<<<<<<< HEAD
-#<<<<<<< HEAD
-#=======
-plot(inc_edu_county[, 3:7], main = "Correlation plot")
-=======
-Cplot <- plot(inc_edu_county[, 3:7], main = "Correlation plot")
->>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
-
-dframe <- par(mfrow = c(1, 1))
-
-```
-
-
-=======
->>>>>>> 9361c08845fa3c705740d6df8d8a45681db5eebc
 ```{r Statewise Cleaning}
 
 

@@ -55,3 +55,93 @@ summary(multi_model)
 densityPlot(inc_edu_county$Percent_Bachelors, "Density Plot", "Percent Bachelors")
 ```
   
+County Table Grouped By Urban Classification
+
+```{r group_by_urb}
+bach_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))
+
+no_diploma_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_No_Diploma),funs(mean(Percent_No_Diploma)))
+
+diploma_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Diploma),funs(mean(Percent_Diploma)))
+
+assoc_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Associates),funs(mean(Percent_Associates)))
+
+group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_urban_code"),
+  list(no_diploma_urban_class, diploma_urban_class, assoc_urban_class, bach_urban_class))
+
+```
+
+#Graphs:
+
+```{r graphs}
+
+bach_point(full_county_table$Median_Household_Income_2019)
+bach_smooth(full_county_table$Median_Household_Income_2019)
+
+bach_point(full_county_table$avg_decade_growth_rate)
+bach_smooth(full_county_table$avg_decade_growth_rate)
+
+bach_point(full_county_table$Percent_Poverty)
+bach_smooth(full_county_table$Percent_Poverty)
+
+bach_boxplot(full_county_table$Rural_urban_code)
+
+```
+
+```{r functions}
+densityPlot = function(x_var, plot_name, x_name){
+  x <- na.omit(x)
+  hist(x_var, col = "red", border = "black", prob = TRUE, main = plot_name, xlab = x_name)
+  lines(density(x_var), col = "blue", lwd = 2)
+}
+
+bach_point = function(x_var){
+  ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
+  geom_point()
+}
+
+bach_smooth = function(x_var){
+  ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
+  geom_smooth()
+}
+
+bach_boxplot = function(x_var){
+  ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
+  geom_boxplot()
+}
+
+urb_col <- function(y_var){
+  ggplot(grouped_by_urban_class, aes(Rural_urban_code,y_var,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+}
+
+  
+
+```
+
+```{r group_by_urb_graphs}
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_No_Diploma,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Diploma,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Associates,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+```
