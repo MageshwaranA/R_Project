@@ -21,8 +21,8 @@ sidebar <- dashboardSidebar(
              tabName = "map",
              icon = icon("map-pin")
     ),
-    menuItem("Graph",
-             tabName = "graph",
+    menuItem("Plots",
+             tabName = "plots",
              icon = icon("chart-bar"),
              startExpanded = FALSE,
              menuItem("Correlation",
@@ -34,7 +34,11 @@ sidebar <- dashboardSidebar(
                          menuSubItem(
                            "Density",
                            tabName = "density"
-                         ))
+                         ),
+                      menuSubItem(
+                        "Graphs",
+                        tabName = "graphs"
+                      ))
     ),
     menuItem("Model",
              tabName = "model",
@@ -82,6 +86,37 @@ body <- dashboardBody(
                             width = 500,
                 )
               ),
+            )
+    ),
+    tabItem(tabName = "graphs",
+            fluidPage(
+              h1(strong("Trends"),
+                 align = "center"),
+              box(plotOutput("trend"), width = 15),
+              box(
+                selectInput("xfact","X Factor:",
+                            c("Median_Household_Income_2019",
+                              "avg_decade_growth_rate",
+                              "Percent_Poverty"),
+                            width = 500,
+                )
+              ),
+              box(
+                selectInput("yfact","Y Factor:",
+                            c("Percent_No_Diploma",
+                              "Percent_Diploma",
+                              "Percent_Associates",
+                              "Percent_Bachelors"),
+                            width = 500,
+                )
+              ),
+              box(
+                selectInput("geo","Geography:",
+                            c("State",
+                              "County"),
+                            width = 500,
+                            )
+              )
             )
     ),
     tabItem(
@@ -208,20 +243,20 @@ server <- function(input, output) {
             legend.text = element_text(size = 06))
       
   })
-  output$ccounty <- renderPlot({
-    plot_usmap(data = Ct_Pop,
-               values = input$column,
-               labels = TRUE) +
-      scale_fill_gradient(low = "red",
-                          high = "green",
-                          name = "Percentage%",
-                          label = scales::comma,
-                          limits = c(0,100)) +
-      ggtitle(input$column) +
-      theme(plot.title = element_text(size = 15,
-                                      hjust = 0.5)) +
-      theme(legend.position = "right",
-            legend.text = element_text(size = 06))
+  output$trend <- renderPlot({
+    
+    if (input$geo == "State")
+      ggplot(full_state_table,
+             aes(full_state_table[[input$xfact]],full_state_table[[input$yfact]])) +
+             labs(x = input$xfact, y = input$yfact) +
+        geom_smooth()
+    else
+      ggplot(full_county_table,
+             aes(full_county_table[[input$xfact]],full_county_table[[input$yfact]])) +
+              labs(x = input$xfact, y = input$yfact) +
+      geom_smooth()
+    
+    
   })
   output$text <- renderText({
     paste("We will be investigating the effects of Income on the student enrollment to different programs. We have imported relevant dataset to support our study, cleaned and organized the dataframe according to our preference to establish an relationship.

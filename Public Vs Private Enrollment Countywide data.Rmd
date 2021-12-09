@@ -43,21 +43,9 @@ Population_dataset <- read_excel("dataset/PopulationEstimates.xlsx", range = "A2
 Poverty_dataset <- read_excel("dataset/PovertyEstimates.xls", range = "A5:AB3198")
 ```
 
-<<<<<<< HEAD
-#Sorting it out using data summary techniques
-
-```{r reactable_code}
-reactable(Enrollment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
-    onClick = "expand")
-reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
-    onClick = "expand")
-```
-#Making the change for you
+#Tidying the tables
 
 ```{r tidy_tables}
-=======
-```{r income_tbl}
->>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
 income_table <- Unemployment_dataset %>%
   select("FIPS_Code","Area_name","Median_Household_Income_2019")
 
@@ -76,8 +64,6 @@ pov_table <- Poverty_dataset%>%
 
 ```
 
-Replace for now
-#mutate(avg_decade_growth_rate = #percent((1+((End_popn-Start_popn)/Start_popn))^(1/3)-1, accuracy = 0.1))
 
 Merged Tables:
 
@@ -91,7 +77,6 @@ inc_edu_county <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
   filter(!endsWith(FIPS_Code,"000"))
 ```
 
-<<<<<<< HEAD
 Full Tables:
 
 ```{r join_county_tables}
@@ -116,10 +101,6 @@ group_by(Rural_urban_code)%>%
   summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))
 ```
 
-
-
-
-
 Graphs:
 
 ```{r graphs}
@@ -139,96 +120,6 @@ ggplot(grouped_by_urban_class, aes(Rural_urban_code,Percent_Bachelors,fill = Rur
   geom_col()+
   theme(legend.position = "none")
 ```
-
-```{r graphs_no_func}
-ggplot(full_county_table,aes(Median_Household_Income_2019,Percent_Bachelors))+
-geom_point()
-
-ggplot(full_county_table,aes(Median_Household_Income_2019,Percent_Bachelors))+
-geom_smooth()
-
-ggplot(full_county_table,aes(avg_decade_growth_rate,Percent_Bachelors))+
-geom_point()
-
-ggplot(full_county_table,aes(avg_decade_growth_rate,Percent_Bachelors))+
-geom_smooth()
-
-ggplot(full_county_table,aes(Percent_Poverty,Percent_Bachelors))+
-geom_point()
-
-ggplot(full_county_table,aes(Percent_Poverty,Percent_Bachelors))+
-geom_smooth()
-```
-
-
-
-Model Matrix:
-
-```{r}
-model.matrix(Percent_Bachelors~Rural_urban_code,data=full_county_table)
-```
-
-
-Linear Regression Models:
-
-```{r lin_models}
-income_model <- lm(Percent_Bachelors~Median_Household_Income_2019,data=full_county_table)
-summary(income_model)
-
-growth_model <- lm(Percent_Bachelors~avg_decade_growth_rate,data=full_county_table)
-summary(growth_model)
-
-poverty_model <- lm(Percent_Bachelors~Percent_Poverty,data=full_county_table)
-summary(poverty_model)
-
-
-```
-
-The greatest single indicator of county-level education that we examined is median income. According to the linear model I created, median income accounts for 50.76% of the variation among counties in percentage of people receiving a bachelors degree. 
-
-
-```{r lin_models_diploma}
-income_no_diploma_model <- lm(Median_Household_Income_2019~Percent_No_Diploma,data=inc_edu_county)
-summary(income_no_diploma_model)
-
-percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
-summary(percent_bach_no_diploma_model)
-
-percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
-summary(percent_bach_no_diploma_model)
-```
-=======
->>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
-
-
-Multiple Linear Regression Models:
-
-```{r multi_models}
-multi_model <- lm(Percent_Bachelors~Median_Household_Income_2019+avg_decade_growth_rate+Percent_Poverty,data=full_county_table)
-summary(multi_model)
-
-```
-
-```{r density_plot_bach}
-densityPlot(inc_edu_county$Percent_Bachelors, "Density Plot", "Percent Bachelors")
-```
-
-####################################################################################
-
-```{r Comparing percentages (Magesh)}
-
-<<<<<<< HEAD
-#<<<<<<< HEAD
-#=======
-plot(inc_edu_county[, 3:7], main = "Correlation plot")
-=======
-Cplot <- plot(inc_edu_county[, 3:7], main = "Correlation plot")
->>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
-
-dframe <- par(mfrow = c(1, 1))
-
-```
-
 
 ```{r Statewise Cleaning}
 
@@ -266,89 +157,4 @@ Ct_Pop <- Ct_Pop %>%
 
 ```
 
-```{r Statewise Income}
-
-Inc <- plot_usmap(data = St_Pop,
-           values = "Income",
-           labels = TRUE) +
-  scale_fill_gradient(low = "red",
-                      high = 'green',
-                      name = NULL) +
-  ggtitle("Statewise Median Income (US,2019)") +
-  theme(plot.title = element_text(size = 15,
-                                  hjust = 0.5)) +
-  theme(legend.position = c(0.2,-0.1),
-        legend.direction = 'horizontal',
-        legend.key.width = unit(0.8,"in"),
-        legend.key.height = unit(0.2,"in"),
-        legend.text = element_text(size = 15))
-
-```
-
-```{r Statewise Less than high school}
-
-LHighSchool <- plot_usmap(data = St_Pop,
-           values = "Less_than_High_School",
-           labels = TRUE) +
-  scale_fill_gradient(low = "red",
-                      high = 'green',
-                      name = NULL) +
-  ggtitle("Statewise Less than High School") +
-  theme(plot.title = element_text(size = 15,
-                                  hjust = 0.5)) +
-  theme(legend.position = c(0.2,-0.1),
-        legend.direction = 'horizontal',
-        legend.key.width = unit(0.8,"in"),
-        legend.key.height = unit(0.2,"in"),
-        legend.text = element_text(size = 15))
-
-
-```
-
-```{r Statewise High School Only}
-
-HighSchool <- plot_usmap(data = St_Pop,
-           values = "High_School_Only",
-           labels = TRUE) +
-  scale_fill_gradient(low = "red",
-                      high = 'green',
-                      name = NULL) +
-  ggtitle("Statewise High School Only") +
-  theme(plot.title = element_text(size = 15,
-                                  hjust = 0.5)) +
-  theme(legend.position = c(0.2,-0.1),
-        legend.direction = 'horizontal',
-        legend.key.width = unit(0.8,"in"),
-        legend.key.height = unit(0.2,"in"),
-        legend.text = element_text(size = 05))
-```
-
-```{r College_or_Associate}
-
-
-Associate <- plot_usmap(data = St_Pop,
-           values = "College_or_Associate",
-           labels = TRUE) +
-  scale_fill_gradient(low = "red",
-                      high = 'green',
-                      name = NULL) +
-  ggtitle("Statewise High School Only") +
-  theme(plot.title = element_text(size = 15,
-                                  hjust = 0.5)) +
-  theme(legend.position = c(0.2,-0.1),
-        legend.direction = 'horizontal',
-        legend.key.width = unit(0.8,"in"),
-        legend.key.height = unit(0.2,"in"),
-        legend.text = element_text(size = 15))
-```
->>>>>>> 4b3d52b0b6c156389b547753236aeb6fb2f5927f
-
-
-```{r}
-
-ggplot(Ct_Pop, aes(x=Income, y=Less_than_High_School) ) +
-  geom_hex(bins = 70) +
-  scale_fill_continuous(type = "viridis") +
-  theme_bw()
-```
 
