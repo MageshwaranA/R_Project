@@ -4,6 +4,32 @@ library(tidyverse)
 library(readr)
 library(readxl)
 library(reactable)
+library(scales)
+```
+
+```{r functions}
+densityPlot = function(x_var, plot_name, x_name){
+  x <- na.omit(x)
+  hist(x_var, col = "red", border = "black", prob = TRUE, main = plot_name, xlab = x_name)
+  lines(density(x_var), col = "blue", lwd = 2)
+}
+
+bach_point = function(x_var){
+  ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
+  geom_point()
+}
+
+bach_smooth = function(x_var){
+  ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
+  geom_smooth()
+}
+
+bach_boxplot = function(x_var){
+  ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
+  geom_boxplot()
+}
+  
+
 ```
 
 ```{r importing_csv}
@@ -11,9 +37,10 @@ Enrollment_dataset <- read_csv("dataset/public-vs-private-enrollment-county-2019
 ```
 
 ```{r importing_xl}
-
 Unemployment_dataset <- read_excel("dataset/Unemployment.xlsx", range = "A5:CN3201")
 Education_dataset <- read_excel("dataset/Education.xlsx", range = "A5:AU3209")
+Population_dataset <- read_excel("dataset/PopulationEstimates.xlsx", range = "A2:H3203")
+Poverty_dataset <- read_excel("dataset/PovertyEstimates.xls", range = "A5:AB3198")
 ```
 
 #Sorting it out using data summary techniques
@@ -26,18 +53,31 @@ reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE,
 ```
 #Making the change for you
 
-```{r income_tbl}
+```{r tidy_tables}
 income_table <- Unemployment_dataset %>%
   select("FIPS_Code","Area_name","Median_Household_Income_2019")
-```
 
-```{r edu_tbl}
 edu_table <- Education_dataset %>%
   select(c(1),c(3),c(44:47))%>%
   rename("FIPS_Code" = c(1), "Area_name" = c(2), "Percent_No_Diploma" = c(3), "Percent_Diploma" = c(4), "Percent_Associates" = c(5),"Percent_Bachelors" = c(6))
+
+popn_table <- Population_dataset%>%
+  select(-c(2),-c(6:7))%>%
+  rename("FIPS_Code" = c(1),"Area_name" = c(2),"Rural_urban_code" = c(3),"Start_popn" = c(4), "End_popn" = c(5))%>%
+  mutate(avg_decade_growth_rate = ((1+((End_popn-Start_popn)/Start_popn))^(1/3)-1))
+
+pov_table <- Poverty_dataset%>%
+  select(c(1),c(3),c(11))%>%
+  rename("FIPS_Code" = c(1),"Percent_Poverty" = c(3))
+
 ```
 
-```{r}
+Replace for now
+#mutate(avg_decade_growth_rate = #percent((1+((End_popn-Start_popn)/Start_popn))^(1/3)-1, accuracy = 0.1))
+
+Merged Tables:
+
+```{r merged_tables}
 inc_edu_state <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
   select(-c(4))%>%
   filter(endsWith(FIPS_Code,"000"))
@@ -47,30 +87,257 @@ inc_edu_county <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
   filter(!endsWith(FIPS_Code,"000"))
 ```
 
-Graphs and Linear Models:
+Full Tables:
 
-```{r income_bach_lin_model}
-ggplot(inc_edu_county,aes(Median_Household_Income_2019,Percent_Bachelors))+
-  geom_point()
+```{r join_county_tables}
+full_county_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"),
+  list(income_table, edu_table, popn_table, pov_table))%>%
+  select(-c(4),-c(9),-c(14))%>%
+  filter(!endsWith(FIPS_Code,"000"))%>%
+  drop_na()
 
-income_bach_model <- lm(Median_Household_Income_2019~Percent_Bachelors,data=inc_edu_county)
-summary(income_bach_model)
+full_state_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"),
+  list(income_table, edu_table, popn_table, pov_table))%>%
+  select(-c(4),-c(9),-c(14))%>%
+  filter(endsWith(FIPS_Code,"000"))%>%
+  select(-c(8))
+
 ```
-
-```{r income_no_diploma}
-income_no_diploma_model <- lm(Median_Household_Income_2019~Percent_No_Diploma,data=inc_edu_county)
-summary(income_no_diploma_model)
-```
-
-```{r percent_bach_no_diploma}
-percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
-summary(percent_bach_no_diploma_model)
-```
+County Table Grouped By Urban Classification
 
 ```{r}
+grouped_by_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))
+```
+
+
+
+
+
+Graphs:
+
+```{r graphs}
+
+bach_point(full_county_table$Median_Household_Income_2019)
+bach_smooth(full_county_table$Median_Household_Income_2019)
+
+bach_point(full_county_table$avg_decade_growth_rate)
+bach_smooth(full_county_table$avg_decade_growth_rate)
+
+bach_point(full_county_table$Percent_Poverty)
+bach_smooth(full_county_table$Percent_Poverty)
+
+bach_boxplot(full_county_table$Rural_urban_code)
+
+ggplot(grouped_by_urban_class, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+```
+
+```{r graphs_no_func}
+ggplot(full_county_table,aes(Median_Household_Income_2019,Percent_Bachelors))+
+geom_point()
+
+ggplot(full_county_table,aes(Median_Household_Income_2019,Percent_Bachelors))+
+geom_smooth()
+
+ggplot(full_county_table,aes(avg_decade_growth_rate,Percent_Bachelors))+
+geom_point()
+
+ggplot(full_county_table,aes(avg_decade_growth_rate,Percent_Bachelors))+
+geom_smooth()
+
+ggplot(full_county_table,aes(Percent_Poverty,Percent_Bachelors))+
+geom_point()
+
+ggplot(full_county_table,aes(Percent_Poverty,Percent_Bachelors))+
+geom_smooth()
+```
+
+
+
+Model Matrix:
+
+```{r}
+model.matrix(Percent_Bachelors~Rural_urban_code,data=full_county_table)
+```
+
+
+Linear Regression Models:
+
+```{r lin_models}
+income_model <- lm(Percent_Bachelors~Median_Household_Income_2019,data=full_county_table)
+summary(income_model)
+
+growth_model <- lm(Percent_Bachelors~avg_decade_growth_rate,data=full_county_table)
+summary(growth_model)
+
+poverty_model <- lm(Percent_Bachelors~Percent_Poverty,data=full_county_table)
+summary(poverty_model)
+
+
+```
+
+The greatest single indicator of county-level education that we examined is median income. According to the linear model I created, median income accounts for 50.76% of the variation among counties in percentage of people receiving a bachelors degree. 
+
+
+```{r lin_models_diploma}
+income_no_diploma_model <- lm(Median_Household_Income_2019~Percent_No_Diploma,data=inc_edu_county)
+summary(income_no_diploma_model)
+
+percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
+summary(percent_bach_no_diploma_model)
+
 percent_bach_no_diploma_model <- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
 summary(percent_bach_no_diploma_model)
 ```
 
+
+Multiple Linear Regression Models:
+
+```{r multi_models}
+multi_model <- lm(Percent_Bachelors~Median_Household_Income_2019+avg_decade_growth_rate+Percent_Poverty,data=full_county_table)
+summary(multi_model)
+
+```
+
+```{r density_plot_bach}
+densityPlot(inc_edu_county$Percent_Bachelors, "Density Plot", "Percent Bachelors")
+```
+
+####################################################################################
+
+```{r Comparing percentages (Magesh)}
+
+#<<<<<<< HEAD
+#=======
+plot(inc_edu_county[, 3:7], main = "Correlation plot")
+
+par(mfrow = c(1, 1))
+
+```
+
+
+
+
+
+```{r State_Map Magesh}
+library(usmap)
+
+US_State <- map_data('state')
+
+ggplot(data=US_State, aes(x=long, y=lat, fill=region, group=group)) +
+  geom_polygon(color = "Black") +
+  guides(fill = FALSE)
+
+```
+
+
+```{r County_Map Magesh}
+library(usmap)
+
+US_county <- map_data('county')
+
+ggplot(data=US_county, aes(x=long, y=lat, fill=region, group=group)) +
+  geom_polygon(color = "Black") +
+  guides(fill = FALSE)
+
+```
+
+```{r Statewise Cleaning}
+
+
+library (usmap)
+St_Pop <- inc_edu_state[order(inc_edu_state$Area_name),]
+St_Pop <- St_Pop[!(St_Pop$Area_name == "United States"),]
+St_Pop$fips <- statepop$fips
+St_Pop$abbr <- statepop$abbr
+
+St_Pop <- St_Pop %>% 
+  rename(Income = Median_Household_Income_2019) %>% 
+  rename(Less_than_High_School = `Percent of adults with less than a high school diploma, 2015-19`) %>% 
+  rename ( High_School_Only = `Percent of adults with a high school diploma only, 2015-19`) %>% 
+  rename(College_or_Associate = `Percent of adults completing some college or associate's degree, 2015-19`) %>% 
+  rename(Bachelors = Percent_Bachelors)
+
+```
+
+```{r Statewise Income}
+
+plot_usmap(data = St_Pop,
+           values = "Income",
+           labels = TRUE) +
+  scale_fill_gradient(low = "red",
+                      high = 'green',
+                      name = NULL) +
+  ggtitle("Statewise Median Income (US,2019)") +
+  theme(plot.title = element_text(size = 15,
+                                  hjust = 0.5)) +
+  theme(legend.position = c(0.2,-0.1),
+        legend.direction = 'horizontal',
+        legend.key.width = unit(0.8,"in"),
+        legend.key.height = unit(0.2,"in"),
+        legend.text = element_text(size = 15))
+
+```
+
+```{r Statewise Less than high school}
+
+plot_usmap(data = St_Pop,
+           values = "Less_than_High_School",
+           labels = TRUE) +
+  scale_fill_gradient(low = "red",
+                      high = 'green',
+                      name = NULL) +
+  ggtitle("Statewise Less than High School") +
+  theme(plot.title = element_text(size = 15,
+                                  hjust = 0.5)) +
+  theme(legend.position = c(0.2,-0.1),
+        legend.direction = 'horizontal',
+        legend.key.width = unit(0.8,"in"),
+        legend.key.height = unit(0.2,"in"),
+        legend.text = element_text(size = 15))
+
+
+```
+
+```{r Statewise High School Only}
+
+plot_usmap(data = St_Pop,
+           values = "High_School_Only",
+           labels = TRUE) +
+  scale_fill_gradient(low = "red",
+                      high = 'green',
+                      name = NULL) +
+  ggtitle("Statewise High School Only") +
+  theme(plot.title = element_text(size = 15,
+                                  hjust = 0.5)) +
+  theme(legend.position = c(0.2,-0.1),
+        legend.direction = 'horizontal',
+        legend.key.width = unit(0.8,"in"),
+        legend.key.height = unit(0.2,"in"),
+        legend.text = element_text(size = 15))
+```
+
+```{r College_or_Associate}
+
+
+plot_usmap(data = St_Pop,
+           values = "College_or_Associate",
+           labels = TRUE) +
+  scale_fill_gradient(low = "red",
+                      high = 'green',
+                      name = NULL) +
+  ggtitle("Statewise High School Only") +
+  theme(plot.title = element_text(size = 15,
+                                  hjust = 0.5)) +
+  theme(legend.position = c(0.2,-0.1),
+        legend.direction = 'horizontal',
+        legend.key.width = unit(0.8,"in"),
+        legend.key.height = unit(0.2,"in"),
+        legend.text = element_text(size = 15))
+```
+>>>>>>> 4b3d52b0b6c156389b547753236aeb6fb2f5927f
 
 
