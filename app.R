@@ -207,6 +207,7 @@ server <- function(input, output) {
     yvar <- input$education
       ggplot(Ct_Pop,
            aes(x = Ct_Pop$Income, y = Ct_Pop[[yvar]])) +
+        labs(x = "Income", y = yvar) +
       geom_hex(bins = 70) +
       scale_fill_continuous(type = "viridis") +
       theme_bw()

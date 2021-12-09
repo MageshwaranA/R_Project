@@ -101,5 +101,3 @@ Ct_Pop <- Ct_Pop %>%
   rename(Bachelors = `Percent_Bachelors`)
 
 ```
-
-
