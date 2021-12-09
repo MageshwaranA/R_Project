@@ -262,20 +262,22 @@ server <- function(input, output) {
     
   })
   output$text <- renderText({
-    paste("We will be investigating the effects of Income on the student enrollment to different programs. We have imported relevant dataset to support our study, cleaned and organized the dataframe according to our preference to establish an relationship.
-          We have grouped the findings as per state and counties in the United States of America and visualized it through the use of plot_usmap function.
-          This plot shows the distribution percentage of student enrollment to different programs in a county or state.
-          Furthermore we have created correlation plot to identify the connection between income and programs enrolled, it is also made dynamic to make it easier to understand the link between two variables.
-          In addition to it, we have performed linear model to get a deeper knowledge on the relation.
-          We have put together all our findings in one place with the help of 'Shiny'.
-          We have used shiny dashboard to summarize our thoughts and process.")
+    paste("Our project is all about investigating the effects of different
+          social and economic factors on graduation and enrollment rates across
+          the country. This will allow us to better understand why there is such
+          a large gap in educational attainment throughout the US. To do this,
+          we imported multiple relevant datasets, cleaned them up in RStudio and
+          used a combination of visualizations and models to gain deeper insights.
+          We also created several maps with the plot_usmap function and created
+          a Shiny App where we displayed all of our findings. Our thoughts and 
+          processes have been summarized in a Shiny Dashboard.")
   })
   output$atext <- renderText({
     paste("A fun loving super active personality who prefers outdoor than indoor.
           Loves all kind of sporting activity and enjoys self time.")
   })
   output$btext <- renderText({
-    paste("Needs to be updated")
+    paste("Ehh... he's alright, I guess.")
   })
   
 }

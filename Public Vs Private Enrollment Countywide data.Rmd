@@ -103,12 +103,17 @@ group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_ur
   list(bach_urban_class, no_diploma_urban_class, diploma_urban_class, assoc_urban_class))
 ```
 
+```{r geom_smooth}
+ggplot(full_county_table, aes(Median_Household_Income_2019, Percent_Bachelors, colour=Rural_urban_code, group = Rural_urban_code))+
+  geom_smooth(se = FALSE)
+```
+Income:
+We found that more urban areas had a greater correlation between income and
+percentage of people receiving a bachelors degree. In more rural areas, the percentage of people with a bachelors degree eventually levels out as income increases. Surprisingly, education levels in counties with a 9 on the rural-urban continuum code actually start to decline when income reaches around $70,000. Counties with a 10 on the scale have an almost perfectly linear relationship between income and education.
 
 #Graphs
 
 ```{r Statewise Cleaning}
-
-
 library (usmap)
 St_Pop <- inc_edu_state[order(inc_edu_state$Area_name),]
 St_Pop <- St_Pop[!(St_Pop$Area_name == "United States"),]
