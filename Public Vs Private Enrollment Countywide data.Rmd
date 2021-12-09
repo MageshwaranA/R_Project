@@ -51,6 +51,7 @@ Poverty_dataset <- read_excel("dataset/PovertyEstimates.xls", range = "A5:AB3198
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #Sorting it out using data summary techniques
 
 ```{r reactable_code}
@@ -64,6 +65,11 @@ reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE,
 #```{r income_tbl}
 #>>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
 
+=======
+#Tidying the tables
+
+```{r tidy_tables}
+>>>>>>> 9361c08845fa3c705740d6df8d8a45681db5eebc
 income_table <- Unemployment_dataset %>%
   select("FIPS_Code","Area_name","Median_Household_Income_2019")
 
@@ -82,6 +88,10 @@ pov_table <- Poverty_dataset%>%
 
 ```
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9361c08845fa3c705740d6df8d8a45681db5eebc
 Merged Tables:
 
 ```{r merged_tables}
@@ -94,7 +104,6 @@ inc_edu_county <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
   filter(!endsWith(FIPS_Code,"000"))
 ```
 
-<<<<<<< HEAD
 Full Tables:
 
 ```{r join_county_tables}
@@ -118,6 +127,7 @@ bach_urban_class <- full_county_table %>%
 group_by(Rural_urban_code)%>%
   summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))
 
+<<<<<<< HEAD
 no_diploma_urban_class <- full_county_table %>%
 group_by(Rural_urban_code)%>%
   summarise_at(vars(Percent_No_Diploma),funs(mean(Percent_No_Diploma)))
@@ -135,6 +145,8 @@ group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_ur
 
 ```
 
+=======
+>>>>>>> 9361c08845fa3c705740d6df8d8a45681db5eebc
 Graphs:
 
 ```{r graphs}
@@ -152,6 +164,7 @@ bach_boxplot(full_county_table$Rural_urban_code)
 
 ```
 
+<<<<<<< HEAD
 ```{r bach_graphs_no_func}
 ggplot(full_county_table,aes(Median_Household_Income_2019,Percent_Bachelors))+
 geom_point()
@@ -261,6 +274,8 @@ dframe <- par(mfrow = c(1, 1))
 ```
 
 
+=======
+>>>>>>> 9361c08845fa3c705740d6df8d8a45681db5eebc
 ```{r Statewise Cleaning}
 
 
@@ -296,82 +311,5 @@ Ct_Pop <- Ct_Pop %>%
   rename(Bachelors = `Percent_Bachelors`)
 
 ```
-
-```{r Statewise Income}
-
-Inc <- plot_usmap(data = St_Pop,
-           values = "Income",
-           labels = TRUE) +
-  scale_fill_gradient(low = "red",
-                      high = 'green',
-                      name = NULL) +
-  ggtitle("Statewise Median Income (US,2019)") +
-  theme(plot.title = element_text(size = 15,
-                                  hjust = 0.5)) +
-  theme(legend.position = c(0.2,-0.1),
-        legend.direction = 'horizontal',
-        legend.key.width = unit(0.8,"in"),
-        legend.key.height = unit(0.2,"in"),
-        legend.text = element_text(size = 15))
-
-```
-
-```{r Statewise Less than high school}
-
-LHighSchool <- plot_usmap(data = St_Pop,
-           values = "Less_than_High_School",
-           labels = TRUE) +
-  scale_fill_gradient(low = "red",
-                      high = 'green',
-                      name = NULL) +
-  ggtitle("Statewise Less than High School") +
-  theme(plot.title = element_text(size = 15,
-                                  hjust = 0.5)) +
-  theme(legend.position = c(0.2,-0.1),
-        legend.direction = 'horizontal',
-        legend.key.width = unit(0.8,"in"),
-        legend.key.height = unit(0.2,"in"),
-        legend.text = element_text(size = 15))
-
-
-```
-
-```{r Statewise High School Only}
-
-HighSchool <- plot_usmap(data = St_Pop,
-           values = "High_School_Only",
-           labels = TRUE) +
-  scale_fill_gradient(low = "red",
-                      high = 'green',
-                      name = NULL) +
-  ggtitle("Statewise High School Only") +
-  theme(plot.title = element_text(size = 15,
-                                  hjust = 0.5)) +
-  theme(legend.position = c(0.2,-0.1),
-        legend.direction = 'horizontal',
-        legend.key.width = unit(0.8,"in"),
-        legend.key.height = unit(0.2,"in"),
-        legend.text = element_text(size = 05))
-```
-
-```{r College_or_Associate}
-
-
-Associate <- plot_usmap(data = St_Pop,
-           values = "College_or_Associate",
-           labels = TRUE) +
-  scale_fill_gradient(low = "red",
-                      high = 'green',
-                      name = NULL) +
-  ggtitle("Statewise High School Only") +
-  theme(plot.title = element_text(size = 15,
-                                  hjust = 0.5)) +
-  theme(legend.position = c(0.2,-0.1),
-        legend.direction = 'horizontal',
-        legend.key.width = unit(0.8,"in"),
-        legend.key.height = unit(0.2,"in"),
-        legend.text = element_text(size = 15))
-```
->>>>>>> 4b3d52b0b6c156389b547753236aeb6fb2f5927f
 
 

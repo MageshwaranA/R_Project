@@ -215,6 +215,31 @@ pre code {
 
 
 <!-- rnb-text-begin -->
+<p>Model Matrix:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9kZWwubWF0cml4KFBlcmNlbnRfQmFjaGVsb3JzflJ1cmFsX3VyYmFuX2NvZGUsZGF0YT1mdWxsX2NvdW50eV90YWJsZSlcbmBgYCJ9 -->
+<pre class="r"><code>model.matrix(Percent_Bachelors~Rural_urban_code,data=full_county_table)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Linear Regression Models:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5jb21lX21vZGVsIDwtIGxtKFBlcmNlbnRfQmFjaGVsb3Jzfk1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTksZGF0YT1mdWxsX2NvdW50eV90YWJsZSlcbnN1bW1hcnkoaW5jb21lX21vZGVsKVxuXG5ncm93dGhfbW9kZWwgPC0gbG0oUGVyY2VudF9CYWNoZWxvcnN+YXZnX2RlY2FkZV9ncm93dGhfcmF0ZSxkYXRhPWZ1bGxfY291bnR5X3RhYmxlKVxuc3VtbWFyeShncm93dGhfbW9kZWwpXG5cbnBvdmVydHlfbW9kZWwgPC0gbG0oUGVyY2VudF9CYWNoZWxvcnN+UGVyY2VudF9Qb3ZlcnR5LGRhdGE9ZnVsbF9jb3VudHlfdGFibGUpXG5zdW1tYXJ5KHBvdmVydHlfbW9kZWwpXG5cblxuYGBgIn0= -->
+<pre class="r"><code>income_model &lt;- lm(Percent_Bachelors~Median_Household_Income_2019,data=full_county_table)
+summary(income_model)
+
+growth_model &lt;- lm(Percent_Bachelors~avg_decade_growth_rate,data=full_county_table)
+summary(growth_model)
+
+poverty_model &lt;- lm(Percent_Bachelors~Percent_Poverty,data=full_county_table)
+summary(poverty_model)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>The greatest single indicator of county-level education that we examined is median income. According to the linear model I created, median income accounts for 50.76% of the variation among counties in percentage of people receiving a bachelors degree.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5jb21lX25vX2RpcGxvbWFfbW9kZWwgPC0gbG0oTWVkaWFuX0hvdXNlaG9sZF9JbmNvbWVfMjAxOX5QZXJjZW50X05vX0RpcGxvbWEsZGF0YT1pbmNfZWR1X2NvdW50eSlcbnN1bW1hcnkoaW5jb21lX25vX2RpcGxvbWFfbW9kZWwpXG5cbnBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsIDwtIGxtKFBlcmNlbnRfTm9fRGlwbG9tYX5QZXJjZW50X0JhY2hlbG9ycyxkYXRhPWluY19lZHVfY291bnR5KVxuc3VtbWFyeShwZXJjZW50X2JhY2hfbm9fZGlwbG9tYV9tb2RlbClcblxucGVyY2VudF9iYWNoX25vX2RpcGxvbWFfbW9kZWwgPC0gbG0oUGVyY2VudF9Ob19EaXBsb21hflBlcmNlbnRfQmFjaGVsb3JzLGRhdGE9aW5jX2VkdV9jb3VudHkpXG5zdW1tYXJ5KHBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsKVxuYGBgIn0= -->
@@ -229,9 +254,26 @@ summary(percent_bach_no_diploma_model)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>Multiple Linear Regression Models:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVsdGlfbW9kZWwgPC0gbG0oUGVyY2VudF9CYWNoZWxvcnN+TWVkaWFuX0hvdXNlaG9sZF9JbmNvbWVfMjAxOSthdmdfZGVjYWRlX2dyb3d0aF9yYXRlK1BlcmNlbnRfUG92ZXJ0eSxkYXRhPWZ1bGxfY291bnR5X3RhYmxlKVxuc3VtbWFyeShtdWx0aV9tb2RlbClcblxuYGBgIn0= -->
+<pre class="r"><code>multi_model &lt;- lm(Percent_Bachelors~Median_Household_Income_2019+avg_decade_growth_rate+Percent_Poverty,data=full_county_table)
+summary(multi_model)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVuc2l0eVBsb3QoaW5jX2VkdV9jb3VudHkkUGVyY2VudF9CYWNoZWxvcnMsIFwiRGVuc2l0eSBQbG90XCIsIFwiUGVyY2VudCBCYWNoZWxvcnNcIilcbmBgYCJ9 -->
+<pre class="r"><code>densityPlot(inc_edu_county$Percent_Bachelors, &quot;Density Plot&quot;, &quot;Percent Bachelors&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiQWRkaXRpb25hbCBJbnNpZ2h0cyIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKCgpgYGB7ciBsaW5fbW9kZWxzX2RpcGxvbWF9CmluY29tZV9ub19kaXBsb21hX21vZGVsIDwtIGxtKE1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTl+UGVyY2VudF9Ob19EaXBsb21hLGRhdGE9aW5jX2VkdV9jb3VudHkpCnN1bW1hcnkoaW5jb21lX25vX2RpcGxvbWFfbW9kZWwpCgpwZXJjZW50X2JhY2hfbm9fZGlwbG9tYV9tb2RlbCA8LSBsbShQZXJjZW50X05vX0RpcGxvbWF+UGVyY2VudF9CYWNoZWxvcnMsZGF0YT1pbmNfZWR1X2NvdW50eSkKc3VtbWFyeShwZXJjZW50X2JhY2hfbm9fZGlwbG9tYV9tb2RlbCkKCnBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsIDwtIGxtKFBlcmNlbnRfTm9fRGlwbG9tYX5QZXJjZW50X0JhY2hlbG9ycyxkYXRhPWluY19lZHVfY291bnR5KQpzdW1tYXJ5KHBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsKQpgYGAKCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiQWRkaXRpb25hbCBJbnNpZ2h0cyIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKCgpNb2RlbCBNYXRyaXg6CgpgYGB7cn0KbW9kZWwubWF0cml4KFBlcmNlbnRfQmFjaGVsb3JzflJ1cmFsX3VyYmFuX2NvZGUsZGF0YT1mdWxsX2NvdW50eV90YWJsZSkKYGBgCgoKCkxpbmVhciBSZWdyZXNzaW9uIE1vZGVsczoKCmBgYHtyIGxpbl9tb2RlbHN9CmluY29tZV9tb2RlbCA8LSBsbShQZXJjZW50X0JhY2hlbG9yc35NZWRpYW5fSG91c2Vob2xkX0luY29tZV8yMDE5LGRhdGE9ZnVsbF9jb3VudHlfdGFibGUpCnN1bW1hcnkoaW5jb21lX21vZGVsKQoKZ3Jvd3RoX21vZGVsIDwtIGxtKFBlcmNlbnRfQmFjaGVsb3JzfmF2Z19kZWNhZGVfZ3Jvd3RoX3JhdGUsZGF0YT1mdWxsX2NvdW50eV90YWJsZSkKc3VtbWFyeShncm93dGhfbW9kZWwpCgpwb3ZlcnR5X21vZGVsIDwtIGxtKFBlcmNlbnRfQmFjaGVsb3JzflBlcmNlbnRfUG92ZXJ0eSxkYXRhPWZ1bGxfY291bnR5X3RhYmxlKQpzdW1tYXJ5KHBvdmVydHlfbW9kZWwpCgoKYGBgCgpUaGUgZ3JlYXRlc3Qgc2luZ2xlIGluZGljYXRvciBvZiBjb3VudHktbGV2ZWwgZWR1Y2F0aW9uIHRoYXQgd2UgZXhhbWluZWQgaXMgbWVkaWFuIGluY29tZS4gQWNjb3JkaW5nIHRvIHRoZSBsaW5lYXIgbW9kZWwgSSBjcmVhdGVkLCBtZWRpYW4gaW5jb21lIGFjY291bnRzIGZvciA1MC43NiUgb2YgdGhlIHZhcmlhdGlvbiBhbW9uZyBjb3VudGllcyBpbiBwZXJjZW50YWdlIG9mIHBlb3BsZSByZWNlaXZpbmcgYSBiYWNoZWxvcnMgZGVncmVlLiAKCgpgYGB7ciBsaW5fbW9kZWxzX2RpcGxvbWF9CmluY29tZV9ub19kaXBsb21hX21vZGVsIDwtIGxtKE1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTl+UGVyY2VudF9Ob19EaXBsb21hLGRhdGE9aW5jX2VkdV9jb3VudHkpCnN1bW1hcnkoaW5jb21lX25vX2RpcGxvbWFfbW9kZWwpCgpwZXJjZW50X2JhY2hfbm9fZGlwbG9tYV9tb2RlbCA8LSBsbShQZXJjZW50X05vX0RpcGxvbWF+UGVyY2VudF9CYWNoZWxvcnMsZGF0YT1pbmNfZWR1X2NvdW50eSkKc3VtbWFyeShwZXJjZW50X2JhY2hfbm9fZGlwbG9tYV9tb2RlbCkKCnBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsIDwtIGxtKFBlcmNlbnRfTm9fRGlwbG9tYX5QZXJjZW50X0JhY2hlbG9ycyxkYXRhPWluY19lZHVfY291bnR5KQpzdW1tYXJ5KHBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsKQpgYGAKCgpNdWx0aXBsZSBMaW5lYXIgUmVncmVzc2lvbiBNb2RlbHM6CgpgYGB7ciBtdWx0aV9tb2RlbHN9Cm11bHRpX21vZGVsIDwtIGxtKFBlcmNlbnRfQmFjaGVsb3Jzfk1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTkrYXZnX2RlY2FkZV9ncm93dGhfcmF0ZStQZXJjZW50X1BvdmVydHksZGF0YT1mdWxsX2NvdW50eV90YWJsZSkKc3VtbWFyeShtdWx0aV9tb2RlbCkKCmBgYAoKYGBge3IgZGVuc2l0eV9wbG90X2JhY2h9CmRlbnNpdHlQbG90KGluY19lZHVfY291bnR5JFBlcmNlbnRfQmFjaGVsb3JzLCAiRGVuc2l0eSBQbG90IiwgIlBlcmNlbnQgQmFjaGVsb3JzIikKYGBgCiAg</div>
 
 
 
