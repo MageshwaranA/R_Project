@@ -28,6 +28,13 @@ bach_boxplot = function(x_var){
   ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
   geom_boxplot()
 }
+
+urb_col <- function(y_var){
+  ggplot(grouped_by_urban_class, aes(Rural_urban_code,y_var,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+}
+
   
 
 ```
@@ -109,8 +116,7 @@ County Table Grouped By Urban Classification
 ```{r group_by_urb}
 bach_urban_class <- full_county_table %>%
 group_by(Rural_urban_code)%>%
-  summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))#%>%
-  #summarise_at(vars(Percent_No_Diploma), funs(mean(Percent_No_Diploma)))
+  summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))
 
 no_diploma_urban_class <- full_county_table %>%
 group_by(Rural_urban_code)%>%
@@ -124,6 +130,8 @@ assoc_urban_class <- full_county_table %>%
 group_by(Rural_urban_code)%>%
   summarise_at(vars(Percent_Associates),funs(mean(Percent_Associates)))
 
+group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_urban_code"),
+  list(no_diploma_urban_class, diploma_urban_class, assoc_urban_class, bach_urban_class))
 
 ```
 
@@ -142,9 +150,7 @@ bach_smooth(full_county_table$Percent_Poverty)
 
 bach_boxplot(full_county_table$Rural_urban_code)
 
-ggplot(grouped_by_urban_class, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
-  geom_col()+
-  theme(legend.position = "none")
+
 ```
 
 ```{r graphs_no_func}
@@ -165,6 +171,29 @@ geom_point()
 
 ggplot(full_county_table,aes(Percent_Poverty,Percent_Bachelors))+
 geom_smooth()
+
+bach_boxplot(full_county_table$Rural_urban_code)
+
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_No_Diploma,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Diploma,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Associates,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
+ggplot(grouped_by_urban_class, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
 ```
 
 
@@ -187,7 +216,6 @@ summary(growth_model)
 
 poverty_model <- lm(Percent_Bachelors~Percent_Poverty,data=full_county_table)
 summary(poverty_model)
-
 
 ```
 
