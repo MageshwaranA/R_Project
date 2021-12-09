@@ -253,12 +253,14 @@ server <- function(input, output) {
       ggplot(full_state_table,
              aes(full_state_table[[input$xfact]],full_state_table[[input$yfact]])) +
              labs(x = input$xfact, y = input$yfact) +
-        geom_smooth()
+        geom_smooth() +
+        geom_line()
     else
       ggplot(full_county_table,
              aes(full_county_table[[input$xfact]],full_county_table[[input$yfact]])) +
               labs(x = input$xfact, y = input$yfact) +
-      geom_smooth()
+      geom_smooth() +
+      geom_line()
     
     
   })

@@ -5,6 +5,7 @@ library(readr)
 library(readxl)
 library(reactable)
 library(scales)
+library(hrbrthemes)
 ```
 
 ```{r importing_xl}
@@ -101,3 +102,11 @@ Ct_Pop <- Ct_Pop %>%
   rename(Bachelors = `Percent_Bachelors`)
 
 ```
+
+```{r}
+ggplot(full_county_table, aes(x = Median_Household_Income_2019, y = Percent_No_Diploma)) +
+  geom_point() +
+  geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
+  theme_ipsum()
+```
+
