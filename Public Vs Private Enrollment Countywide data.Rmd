@@ -15,7 +15,19 @@ Population_dataset <- read_excel("dataset/PopulationEstimates.xlsx", range = "A2
 Poverty_dataset <- read_excel("dataset/PovertyEstimates.xls", range = "A5:AB3198")
 ```
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+#Sorting it out using data summary techniques
+
+```{r reactable_code}
+reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
+    onClick = "expand")
+```
+#Making the change for you
+=======
 #Tidying the tables
+>>>>>>> 15bb89b599258dc665d595d285853892713b39b0
 
 ```{r tidy_tables}
 income_table <- Unemployment_dataset %>%
@@ -65,6 +77,34 @@ full_state_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"
 
 ```
 
+  
+County Table Grouped By Urban Classification
+
+```{r group_by_urb}
+bach_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))
+
+no_diploma_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_No_Diploma),funs(mean(Percent_No_Diploma)))
+
+diploma_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Diploma),funs(mean(Percent_Diploma)))
+
+assoc_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Associates),funs(mean(Percent_Associates)))
+
+```
+
+```{r full_group_by_urb}
+group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_urban_code"),
+  list(bach_urban_class, no_diploma_urban_class, diploma_urban_class, assoc_urban_class))
+```
+
+
 #Graphs
 
 ```{r Statewise Cleaning}
@@ -73,7 +113,7 @@ full_state_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"
 library (usmap)
 St_Pop <- inc_edu_state[order(inc_edu_state$Area_name),]
 St_Pop <- St_Pop[!(St_Pop$Area_name == "United States"),]
-St_Pop$fips <- statepop$fips
+St_Pop$fips <- statepop$fips 
 St_Pop$abbr <- statepop$abbr
 
 St_Pop <- St_Pop %>% 
