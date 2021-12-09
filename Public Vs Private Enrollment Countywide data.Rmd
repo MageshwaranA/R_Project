@@ -61,15 +61,6 @@ reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE,
 #Making the change for you
 
 ```{r tidy_tables}
-#=======
-#```{r income_tbl}
-#>>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
-
-=======
-#Tidying the tables
-
-```{r tidy_tables}
->>>>>>> 9361c08845fa3c705740d6df8d8a45681db5eebc
 income_table <- Unemployment_dataset %>%
   select("FIPS_Code","Area_name","Median_Household_Income_2019")
 
