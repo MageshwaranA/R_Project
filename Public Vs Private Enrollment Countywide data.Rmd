@@ -32,9 +32,9 @@ bach_boxplot = function(x_var){
 
 ```
 
-```{r importing_csv}
-Enrollment_dataset <- read_csv("dataset/public-vs-private-enrollment-county-2019.csv") 
-```
+
+#Enrollment_dataset <- #read_csv("dataset/public-vs-private-enrollment-county-2019.csv") 
+
 
 ```{r importing_xl}
 Unemployment_dataset <- read_excel("dataset/Unemployment.xlsx", range = "A5:CN3201")
@@ -47,17 +47,16 @@ Poverty_dataset <- read_excel("dataset/PovertyEstimates.xls", range = "A5:AB3198
 #Sorting it out using data summary techniques
 
 ```{r reactable_code}
-reactable(Enrollment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
-    onClick = "expand")
 reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
     onClick = "expand")
 ```
 #Making the change for you
 
 ```{r tidy_tables}
-=======
-```{r income_tbl}
->>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
+#=======
+#```{r income_tbl}
+#>>>>>>> 13c3c6b3c8f803ec9903caed66ce2d1be91421d1
+
 income_table <- Unemployment_dataset %>%
   select("FIPS_Code","Area_name","Median_Household_Income_2019")
 
@@ -75,9 +74,6 @@ pov_table <- Poverty_dataset%>%
   rename("FIPS_Code" = c(1),"Percent_Poverty" = c(3))
 
 ```
-
-Replace for now
-#mutate(avg_decade_growth_rate = #percent((1+((End_popn-Start_popn)/Start_popn))^(1/3)-1, accuracy = 0.1))
 
 Merged Tables:
 
@@ -110,15 +106,26 @@ full_state_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"
 ```
 County Table Grouped By Urban Classification
 
-```{r}
-grouped_by_urban_class <- full_county_table %>%
+```{r group_by_urb}
+bach_urban_class <- full_county_table %>%
 group_by(Rural_urban_code)%>%
-  summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))
+  summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))#%>%
+  #summarise_at(vars(Percent_No_Diploma), funs(mean(Percent_No_Diploma)))
+
+no_diploma_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_No_Diploma),funs(mean(Percent_No_Diploma)))
+
+diploma_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Diploma),funs(mean(Percent_Diploma)))
+
+assoc_urban_class <- full_county_table %>%
+group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Associates),funs(mean(Percent_Associates)))
+
+
 ```
-
-
-
-
 
 Graphs:
 

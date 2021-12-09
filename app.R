@@ -182,6 +182,9 @@ server <- function(input, output) {
              ylab = input$education)
     
   })
+  #Tyler
+
+  
   output$sstate <- renderPlot({
     plot_usmap(data = St_Pop,
                values = input$columns,
