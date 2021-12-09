@@ -212,6 +212,9 @@ server <- function(input, output) {
       theme_bw()
       
   })
+  #Tyler
+
+  
   output$sstate <- renderPlot({
     if (input$geography == "State")
       plot_usmap(data = St_Pop,
