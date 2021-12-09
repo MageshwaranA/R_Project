@@ -150,10 +150,9 @@ bach_smooth(full_county_table$Percent_Poverty)
 
 bach_boxplot(full_county_table$Rural_urban_code)
 
-
 ```
 
-```{r graphs_no_func}
+```{r bach_graphs_no_func}
 ggplot(full_county_table,aes(Median_Household_Income_2019,Percent_Bachelors))+
 geom_point()
 
@@ -174,6 +173,9 @@ geom_smooth()
 
 bach_boxplot(full_county_table$Rural_urban_code)
 
+```
+
+```{r group_by_urb_graphs}
 ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_No_Diploma,fill = Rural_urban_code))+
   geom_col()+
   theme(legend.position = "none")
@@ -189,13 +191,7 @@ ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Associates,fill = Rural_
 ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
   geom_col()+
   theme(legend.position = "none")
-
-ggplot(grouped_by_urban_class, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
-  geom_col()+
-  theme(legend.position = "none")
-
 ```
-
 
 
 Model Matrix:
