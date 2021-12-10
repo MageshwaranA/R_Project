@@ -1,25 +1,23 @@
 #Loading the packages
+
 ```{r load_packages}
 library(tidyverse)
 library(readr)
 library(readxl)
 library(reactable)
 library(scales)
+library(hrbrthemes)
+library(ggridges)
+library(gganimate)
+library(viridis)
+library(gifski)
 ```
 
-```{r functions}
-multi_smooth <- function(x,y,x_name,y_name){
- ggplot(full_county_table, aes(x, y, colour = Rural_urban_code, group = Rural_urban_code))+
-  geom_smooth(se = FALSE)+
-    labs(y=y_name,x=x_name)
-}
+<<<<<<< HEAD
 
-multi_point <- function(x,y,x_name,y_name){
- ggplot(full_county_table, aes(x, y, colour = Rural_urban_code))+
-  geom_point()+
-    labs(y=y_name,x=x_name)
-}
-```
+=======
+#Importing dataset
+>>>>>>> 2f8919f7b0339b9b6d2753a5f77562a4d052045f
 
 ```{r importing_xl}
 Unemployment_dataset <- read_excel("dataset/Unemployment.xlsx", range = "A5:CN3201")
@@ -28,23 +26,15 @@ Population_dataset <- read_excel("dataset/PopulationEstimates.xlsx", range = "A2
 Poverty_dataset <- read_excel("dataset/PovertyEstimates.xls", range = "A5:AB3198")
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-#Sorting it out using data summary techniques
-
-```{r reactable_code}
-reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
-    onClick = "expand")
-```
-#Making the change for you
-=======
 #Tidying the tables
->>>>>>> 15bb89b599258dc665d595d285853892713b39b0
 
 ```{r tidy_tables}
 income_table <- Unemployment_dataset %>%
   select("FIPS_Code","Area_name","Median_Household_Income_2019")
+
+income_tab <- income_table %>% 
+  rename("Median Income" = Median_Household_Income_2019)
+
 
 edu_table <- Education_dataset %>%
   select(c(1),c(3),c(44:47))%>%
@@ -73,7 +63,7 @@ inc_edu_county <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
   filter(!endsWith(FIPS_Code,"000"))
 ```
 
-Full Tables:
+#Full Tables:
 
 ```{r join_county_tables}
 full_county_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"),
@@ -88,8 +78,26 @@ full_state_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"
   filter(endsWith(FIPS_Code,"000"))%>%
   select(-c(8))
 ```
-  
+<<<<<<< HEAD
+
+```{r functions}
+multi_smooth <- function(x,y,x_name,y_name){
+ ggplot(full_county_table, aes(x, y, colour = Rural_urban_code, group = Rural_urban_code))+
+  geom_smooth(se = FALSE)+
+    labs(y=y_name,x=x_name)
+}
+
+multi_point <- function(x,y,x_name,y_name){
+ ggplot(full_county_table, aes(x, y, colour = Rural_urban_code))+
+  geom_point()+
+    labs(y=y_name,x=x_name)
+}
+```
 County Table Grouped By Urban Classification
+=======
+
+#County Table Grouped By Urban Classification
+>>>>>>> 2f8919f7b0339b9b6d2753a5f77562a4d052045f
 
 ```{r group_by_urb}
 bach_urban_class <- full_county_table %>%
@@ -115,6 +123,7 @@ group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_ur
   list(bach_urban_class, no_diploma_urban_class, diploma_urban_class, assoc_urban_class))
 ```
 
+<<<<<<< HEAD
 ```{r geom_line_groups_urb}
 tbl <- full_county_table
 
@@ -183,7 +192,18 @@ multi_smooth(tbl$Percent_Poverty, tbl$Percent_Diploma,"Percent_Poverty","Percent
 ```
 
 Income and Bachelors:
-We found that more urban areas had a greater correlation between income and
+=======
+```{r}
+
+final_group <- group_by_urb_table %>% 
+  gather(Qualification, Percentage, Percent_Bachelors:Percent_Associates)
+
+```
+
+#Income:
+
+>>>>>>> 2f8919f7b0339b9b6d2753a5f77562a4d052045f
+We found that more urban areas had a greater correlation between income and the
 percentage of people receiving a bachelors degree. In more rural areas, the percentage of people with a bachelors degree eventually levels out as income increases. Surprisingly, education levels in counties with a 9 on the rural-urban continuum code actually start to decline when income reaches around $70,000. Counties with a 10 on the scale have an almost perfectly linear relationship between income and education.
 
 
