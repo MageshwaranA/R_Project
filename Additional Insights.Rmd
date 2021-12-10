@@ -74,9 +74,6 @@ assoc_urban_class <- full_county_table %>%
 group_by(Rural_urban_code)%>%
   summarise_at(vars(Percent_Associates),funs(mean(Percent_Associates)))
 
-group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_urban_code"),
-  list(no_diploma_urban_class, diploma_urban_class, assoc_urban_class, bach_urban_class))
-
 ```
 
 #Graphs:
@@ -123,9 +120,6 @@ urb_col <- function(y_var){
   geom_col()+
   theme(legend.position = "none")
 }
-
-  
-
 ```
 
 ```{r group_by_urb_graphs}
@@ -145,3 +139,11 @@ ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_u
   geom_col()+
   theme(legend.position = "none")
 ```
+
+  organized the dataframe according to our preference to establish an relationship.
+          We have grouped the findings as per state and counties in the United States of America and visualized it through the use of plot_usmap function.
+          This plot shows the distribution percentage of student enrollment to different programs in a county or state.
+          Furthermore we have created correlation plot to identify the connection between income and programs enrolled, it is also made dynamic to make it easier to understand the link between two variables.
+          In addition to it, we have performed linear model to get a deeper knowledge on the relation.
+          We have put together all our findings in one place with the help of 'Shiny'.
+          We have used shiny dashboard to summarize our thoughts and process.")
