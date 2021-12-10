@@ -109,12 +109,6 @@ final_group <- group_by_urb_table %>%
 
 ```
 
-
-```{r geom_smooth}
-ggplot(final_group, aes(Rural_urban_code, Percentage, colour=Qualification, group = Qualification))+
-  geom_smooth(se = FALSE)
-```
-
 #Income:
 
 We found that more urban areas had a greater correlation between income and
