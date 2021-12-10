@@ -6,6 +6,8 @@ library(readxl)
 library(reactable)
 library(scales)
 library(hrbrthemes)
+library(ggridges)
+library(viridis)
 ```
 
 ```{r importing_xl}
@@ -15,19 +17,15 @@ Population_dataset <- read_excel("dataset/PopulationEstimates.xlsx", range = "A2
 Poverty_dataset <- read_excel("dataset/PovertyEstimates.xls", range = "A5:AB3198")
 ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 #Sorting it out using data summary techniques
 
 ```{r reactable_code}
 reactable(Unemployment_dataset, sortable = FALSE, showPageSizeOptions = TRUE, 
     onClick = "expand")
 ```
-#Making the change for you
-=======
+
 #Tidying the tables
->>>>>>> 15bb89b599258dc665d595d285853892713b39b0
 
 ```{r tidy_tables}
 income_table <- Unemployment_dataset %>%
@@ -148,5 +146,21 @@ ggplot(full_county_table, aes(x = Median_Household_Income_2019, y = Percent_No_D
   geom_point() +
   geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
   theme_ipsum()
+```
+
+```{r}
+
+ggplot(group_by_urb_table, aes(x = "Rural_urban_code", y = "Percent_Bachelors", fill = ..x..)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  scale_fill_viridis(name = "Rural_urban_code", option = "C") +
+  labs(title = 'Temperatures in Lincoln NE in 2016') +
+  theme_ipsum() +
+    theme(
+      legend.position="none",
+      panel.spacing = unit(0.1, "lines"),
+      strip.text.x = element_text(size = 8)
+    )
+
+
 ```
 
