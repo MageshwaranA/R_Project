@@ -7,6 +7,20 @@ library(reactable)
 library(scales)
 ```
 
+```{r functions}
+multi_smooth <- function(x,y,x_name,y_name){
+ ggplot(full_county_table, aes(x, y, colour = Rural_urban_code, group = Rural_urban_code))+
+  geom_smooth(se = FALSE)+
+    labs(y=y_name,x=x_name)
+}
+
+multi_point <- function(x,y,x_name,y_name){
+ ggplot(full_county_table, aes(x, y, colour = Rural_urban_code))+
+  geom_point()+
+    labs(y=y_name,x=x_name)
+}
+```
+
 ```{r importing_xl}
 Unemployment_dataset <- read_excel("dataset/Unemployment.xlsx", range = "A5:CN3201")
 Education_dataset <- read_excel("dataset/Education.xlsx", range = "A5:AU3209")
@@ -73,9 +87,7 @@ full_state_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"
   select(-c(4),-c(9),-c(14))%>%
   filter(endsWith(FIPS_Code,"000"))%>%
   select(-c(8))
-
 ```
-
   
 County Table Grouped By Urban Classification
 
@@ -103,13 +115,78 @@ group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_ur
   list(bach_urban_class, no_diploma_urban_class, diploma_urban_class, assoc_urban_class))
 ```
 
-```{r geom_smooth}
-ggplot(full_county_table, aes(Median_Household_Income_2019, Percent_Bachelors, colour=Rural_urban_code, group = Rural_urban_code))+
-  geom_smooth(se = FALSE)
+```{r geom_line_groups_urb}
+tbl <- full_county_table
+
+multi_point(tbl$Median_Household_Income_2019, tbl$Percent_Bachelors,"Median_Household_Income_2019","Percent_Bachelors")
+
+multi_point(tbl$avg_decade_growth_rate, tbl$Percent_Bachelors,"avg_decade_growth_rate","Percent_Bachelors")
+
+multi_point(tbl$Percent_Poverty, tbl$Percent_Bachelors,"Percent_Poverty","Percent_Bachelors")
+
+
+multi_point(tbl$Median_Household_Income_2019, tbl$Percent_No_Diploma,"Median_Household_Income_2019","Percent_No_Diploma")
+
+multi_point(tbl$avg_decade_growth_rate, tbl$Percent_No_Diploma,"avg_decade_growth_rate", "Percent_No_Diploma")
+
+multi_point(tbl$Percent_Poverty, tbl$Percent_No_Diploma,"Percent_Poverty", "Percent_No_Diploma")
+
+
+multi_point(tbl$Median_Household_Income_2019, tbl$Percent_Diploma, "Median_Household_Income_2019", "Percent_Diploma")
+
+multi_point(tbl$avg_decade_growth_rate, tbl$Percent_Diploma,"Avg_Decade_Growth_Rate","Percent_Diploma")
+
+multi_point(tbl$Percent_Poverty, tbl$Percent_Diploma,"Percent_Poverty","Percent_Diploma")
+
+
+multi_point(tbl$Median_Household_Income_2019, tbl$Percent_Diploma,"Median_Household_Income_2019","Percent_Associates")
+
+multi_point(tbl$avg_decade_growth_rate, tbl$Percent_Diploma,"Avg_Decade_Growth_Rate","Percent_Associates")
+
+multi_point(tbl$Percent_Poverty, tbl$Percent_Diploma,"Percent_Poverty","Percent_Associates")
 ```
-Income:
+
+
+```{r geom_smooth_groups_urb}
+
+tbl <- full_county_table
+
+ggplot(tbl, aes(Median_Household_Income_2019, Percent_Bachelors, colour=Rural_urban_code, group = Rural_urban_code))+
+  geom_smooth(se = FALSE)
+
+ggplot(tbl, aes(avg_decade_growth_rate, Percent_Bachelors, colour=Rural_urban_code, group = Rural_urban_code))+
+  geom_smooth(se = FALSE)
+
+ggplot(tbl, aes(Percent_Poverty, Percent_Bachelors, colour=Rural_urban_code, group = Rural_urban_code))+
+  geom_smooth(se = FALSE)
+
+
+multi_smooth(tbl$Median_Household_Income_2019, tbl$Percent_No_Diploma,"Median_Household_Income_2019","Percent_No_Diploma")
+
+multi_smooth(tbl$avg_decade_growth_rate, tbl$Percent_No_Diploma,"Avg_Decade_Growth_Rate","Percent_No_Diploma")
+
+multi_smooth(tbl$Percent_Poverty, tbl$Percent_No_Diploma,"Percent_Poverty","Percent_No_Diploma")
+
+
+multi_smooth(tbl$Median_Household_Income_2019, tbl$Percent_Diploma,"Median_Household_Income_2019","Percent_Diploma")
+
+multi_smooth(tbl$avg_decade_growth_rate, tbl$Percent_Diploma,"Avg_Decade_Growth_Rate","Percent_Diploma")
+
+multi_smooth(tbl$Percent_Poverty, tbl$Percent_Diploma,"Percent_Poverty","Percent_Diploma")
+
+
+multi_smooth(tbl$Median_Household_Income_2019, tbl$Percent_Diploma,"Median_Household_Income_2019","Percent_Associates")
+
+multi_smooth(tbl$avg_decade_growth_rate, tbl$Percent_Diploma,"Avg_Decade_Growth_Rate","Percent_Associates")
+
+multi_smooth(tbl$Percent_Poverty, tbl$Percent_Diploma,"Percent_Poverty","Percent_Associates")
+```
+
+Income and Bachelors:
 We found that more urban areas had a greater correlation between income and
 percentage of people receiving a bachelors degree. In more rural areas, the percentage of people with a bachelors degree eventually levels out as income increases. Surprisingly, education levels in counties with a 9 on the rural-urban continuum code actually start to decline when income reaches around $70,000. Counties with a 10 on the scale have an almost perfectly linear relationship between income and education.
+
+
 
 #Graphs
 

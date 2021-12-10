@@ -267,7 +267,7 @@ server <- function(input, output) {
           the country. This will allow us to better understand why there is such
           a large gap in educational attainment throughout the US. To do this,
           we imported multiple relevant datasets, cleaned them up in RStudio and
-          used a combination of visualizations and models to gain deeper insights.
+          used a combination of visualizations and models to discover new insights.
           We also created several maps with the plot_usmap function and created
           a Shiny App where we displayed all of our findings. Our thoughts and 
           processes have been summarized in a Shiny Dashboard.")
