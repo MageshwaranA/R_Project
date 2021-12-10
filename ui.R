@@ -3,6 +3,7 @@ library(shinydashboard)
 dashboardPage(
   dashboardHeader(),
   dashboardSidebar(),
-  dashboardBody()
+  dashboardBody(),
+  skin = "purple"
 )
 

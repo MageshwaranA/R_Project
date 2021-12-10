@@ -3,6 +3,8 @@ library(shinydashboard)
 library(DT)
 library(knitr)
 library(shinycssloaders)
+library(shinythemes)
+library (shinyWidgets)
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Summary",
@@ -28,17 +30,14 @@ sidebar <- dashboardSidebar(
              menuItem("Correlation",
                       tabName = "Corrmap"
                       ),
-             menuItem("Visual",
-                         tabName = "visual",
-                         startExpanded = FALSE,
-                         menuSubItem(
-                           "Density",
-                           tabName = "density"
-                         ),
-                      menuSubItem(
-                        "Graphs",
-                        tabName = "graphs"
-                      ))
+             menuItem("Density",
+                         tabName = "density"
+             ),
+            menuItem("Line",
+                      tabName = "line"
+                      ),
+            menuItem("Multi Line",
+                     tabName = 'multiline')
     ),
     menuItem("Model",
              tabName = "model",
@@ -67,9 +66,10 @@ body <- dashboardBody(
     ),
     tabItem(tabName = "Corrmap",
             fluidPage(
-              h1(strong("Correlation Graph"),
+              h1(strong("Correlation"),
                  align = "center"),
-              box(plotOutput("CorrMap"), width = 15)
+              box(plotOutput("CorrMap"),
+                  width = 15)
             )
     ),
     tabItem(tabName = "density",
@@ -79,39 +79,39 @@ body <- dashboardBody(
               box(plotOutput("relation"), width = 15),
               box(
                 selectInput("education","Enrollment:",
-                            c("Less_than_High_School",
-                              "High_School_Only",
-                              "College_or_Associate",
+                            c("No High School",
+                              "High School",
+                              "Associate",
                               "Bachelors"),
                             width = 500,
                 )
               ),
             )
     ),
-    tabItem(tabName = "graphs",
+    tabItem(tabName = "line",
             fluidPage(
               h1(strong("Trends"),
                  align = "center"),
               box(plotOutput("trend"), width = 15),
               box(
                 selectInput("xfact","X Factor:",
-                            c("Median_Household_Income_2019",
-                              "avg_decade_growth_rate",
-                              "Percent_Poverty"),
+                            c("Income",
+                              "Decade Growth Rate",
+                              "Poverty"),
                             width = 500,
                 )
               ),
               box(
                 selectInput("yfact","Y Factor:",
-                            c("Percent_No_Diploma",
-                              "Percent_Diploma",
-                              "Percent_Associates",
-                              "Percent_Bachelors"),
+                            c("No High School",
+                              "High School",
+                              "Associate",
+                              "Bachelors"),
                             width = 500,
                 )
               ),
               box(
-                selectInput("geo","Geography:",
+                selectInput("geo","State or County:",
                             c("State",
                               "County"),
                             width = 500,
@@ -119,6 +119,16 @@ body <- dashboardBody(
               )
             )
     ),
+    tabItem(
+      tabName = "multiline",
+      fluidPage(
+        h2(strong("Qualification at Rural and Urban level")),
+        align = "center"),
+      box(plotOutput("mline"),
+          width = 15),
+      h6("Note: 0 - most rural  9 - most urban"),
+      materialSwitch(inputId = "id", label = "Smooth?", status = "success")
+      ),
     tabItem(
       tabName = "map",
       fluidPage(
@@ -128,15 +138,15 @@ body <- dashboardBody(
             width = 15),
         box(
           selectInput("columns","Qualification:",
-                      c("Less_than_High_School",
-                        "High_School_Only",
-                        "College_or_Associate",
+                      c("No High School",
+                        "High School",
+                        "Associate",
                         "Bachelors"),
                       width = 500,
           )
         ),
         box(
-          selectInput("geography","Geography:",
+          selectInput("geography","State or County:",
                       c("State",
                         "County"),
                       width = 500,
@@ -153,7 +163,14 @@ body <- dashboardBody(
                 width = 500,
                 style="display: block; margin-left: auto; margin-right: auto;"),
             tags$br(),
-            textOutput("text")
+            textOutput("text"),
+            tags$br(),
+            h4("References",
+               align = "left"),
+            h6(em(tags$a(href = "Insidehighered.com","Insidehighered.com")),
+               align = "left"),
+            h6(em(tags$a(href = "https://www.ers.usda.gov/data-products/county-level-data-sets/","www.ers.usda.gov")),
+               align = "left")
           )),
 tabItem(tabName = "model",
         fluidPage(
@@ -174,13 +191,7 @@ tabItem(tabName = "about",
              align = "left"),
           textOutput("btext"),
           tags$br(),
-          tags$br(),
-          h4("References",
-             align = "left"),
-          h6(em(tags$a(href = "Insidehighered.com","Insidehighered.com")),
-             align = "left"),
-          h6(em(tags$a(href = "https://www.ers.usda.gov/data-products/county-level-data-sets/","www.ers.usda.gov")),
-             align = "left")
+          tags$br()
         ))
 )
 )
@@ -195,7 +206,7 @@ ui <- dashboardPage(
 
 
 server <- function(input, output) {
-  output$Incometable <- renderDataTable(income_table)
+  output$Incometable <- renderDataTable(income_tab)
   output$Edutable <- renderDataTable(edu_table)
   output$modelmarkdown <- renderUI({
     HTML(markdown::markdownToHTML(knit("Model.Rmd", quiet = TRUE)))
@@ -203,23 +214,53 @@ server <- function(input, output) {
   output$CorrMap <- renderPlot({
       plot(inc_edu_county[3:7])
   })
+  
+  output$mline <- renderPlot({
+    if (input$id == FALSE)
+      ggplot(final_group) +
+        geom_line(aes(x = Rural_urban_code,
+                      y = Percentage,
+                      color = Qualification)) +
+        labs( x = "Rural Urban Code") 
+    else
+      ggplot(final_group, aes(Rural_urban_code, Percentage, colour=Qualification, group = Qualification))+
+      geom_smooth(se = FALSE) +
+      labs (x = "Rural Urban Code")
+  })
   output$relation <- renderPlot({
-    yvar <- input$education
-      ggplot(Ct_Pop,
-           aes(x = Ct_Pop$Income, y = Ct_Pop[[yvar]])) +
-        labs(x = "Income", y = yvar) +
+    if (input$education == "No High_School")
+      yvalue <- "Less_than_High_School"
+    else if (input$education == "High School")
+      yvalue <- "High_School_Only"
+    else if (input$education == "Associate")
+      yvalue <- "College_or_Associate"
+    else
+      yvalue <- "Bachelors"
+    
+    ggplot(Ct_Pop,
+          aes(x = Ct_Pop$Income, y = Ct_Pop[[yvalue]])) +
+      labs(x = "Income",
+           y = input$education) +
       geom_hex(bins = 70) +
       scale_fill_continuous(type = "viridis") +
       theme_bw()
       
   })
-  #Tyler
-
   
   output$sstate <- renderPlot({
+    
+    if (input$columns == "No High_School")
+      xcolumn <- "Less_than_High_School"
+    else if (input$columns == "High School")
+      xcolumn <- "High_School_Only"
+    else if (input$columns == "Associate")
+      xcolumn <- "College_or_Associate"
+    else
+      xcolumn <- "Bachelors"
+    
     if (input$geography == "State")
       plot_usmap(data = St_Pop,
-                values = input$columns,
+                values = xcolumn,
                 labels = TRUE) +
         scale_fill_gradient(low = "red",
                             high = "green",
@@ -233,7 +274,7 @@ server <- function(input, output) {
               legend.text = element_text(size = 06))
     else
       plot_usmap(data = Ct_Pop,
-                 values = input$columns,
+                 values = xcolumn,
                  labels = TRUE) +
       scale_fill_gradient(low = "red",
                           high = "green",
@@ -249,15 +290,31 @@ server <- function(input, output) {
   })
   output$trend <- renderPlot({
     
+    if (input$xfact == "Income")
+      xfactor <- "Median_Household_Income_2019"
+    else if (input$xfact == "Decade Growth Rate")
+      xfactor <- "avg_decade_growth_rate"
+    else
+      xfactor <- "Percent_Poverty"
+    
+    if (input$yfact == "No High School")
+      yfactor <- "Percent_No_Diploma"
+    else if (input$yfact == "High School")
+      yfactor <- "Percent_Diploma"
+    else if (input$yfact == "Associate")
+      yfactor <- "Percent_Associates"
+    else (input$yfact == "Bachelors")
+      yfactor <- "Percent_Bachelors"
+      
     if (input$geo == "State")
       ggplot(full_state_table,
-             aes(full_state_table[[input$xfact]],full_state_table[[input$yfact]])) +
+             aes(full_state_table[[xfactor]],full_state_table[[yfactor]])) +
              labs(x = input$xfact, y = input$yfact) +
         geom_smooth() +
         geom_line()
     else
       ggplot(full_county_table,
-             aes(full_county_table[[input$xfact]],full_county_table[[input$yfact]])) +
+             aes(full_county_table[[xfactor]],full_county_table[[yfactor]])) +
               labs(x = input$xfact, y = input$yfact) +
       geom_smooth() +
       geom_line()
