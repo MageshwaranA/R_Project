@@ -218,66 +218,31 @@ pre code {
 <p>Model Matrix:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubW9kZWwubWF0cml4KFBlcmNlbnRfQmFjaGVsb3JzflJ1cmFsX3VyYmFuX2NvZGUsZGF0YT1mdWxsX2NvdW50eV90YWJsZSlcbmBgYFxuYGBgIn0= -->
-<pre class="r"><code>```r
-model.matrix(Percent_Bachelors~Rural_urban_code,data=full_county_table)</code></pre>
-<pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-chunk-end --&gt;
-
-
-&lt;!-- rnb-text-begin --&gt;
-
-
-
-
-Linear Regression Models:
-
-
-&lt;!-- rnb-text-end --&gt;
-
-
-&lt;!-- rnb-chunk-begin --&gt;
-
-
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuaW5jb21lX21vZGVsIDwtIGxtKFBlcmNlbnRfQmFjaGVsb3Jzfk1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTksZGF0YT1mdWxsX2NvdW50eV90YWJsZSlcbnN1bW1hcnkoaW5jb21lX21vZGVsKVxuXG5ncm93dGhfbW9kZWwgPC0gbG0oUGVyY2VudF9CYWNoZWxvcnN+YXZnX2RlY2FkZV9ncm93dGhfcmF0ZSxkYXRhPWZ1bGxfY291bnR5X3RhYmxlKVxuc3VtbWFyeShncm93dGhfbW9kZWwpXG5cbnBvdmVydHlfbW9kZWwgPC0gbG0oUGVyY2VudF9CYWNoZWxvcnN+UGVyY2VudF9Qb3ZlcnR5LGRhdGE9ZnVsbF9jb3VudHlfdGFibGUpXG5zdW1tYXJ5KHBvdmVydHlfbW9kZWwpXG5cblxuYGBgXG5gYGAifQ== --&gt;
-
-```r
-```r
-income_model &lt;- lm(Percent_Bachelors~Median_Household_Income_2019,data=full_county_table)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubW9kZWwubWF0cml4KFBlcmNlbnRfQmFjaGVsb3JzflJ1cmFsX3VyYmFuX2NvZGUsZGF0YT1mdWxsX2NvdW50eV90YWJsZSlcbmBgYCJ9 -->
+<pre class="r"><code>model.matrix(Percent_Bachelors~Rural_urban_code,data=full_county_table)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Linear Regression Models:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5jb21lX21vZGVsIDwtIGxtKFBlcmNlbnRfQmFjaGVsb3Jzfk1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTksZGF0YT1mdWxsX2NvdW50eV90YWJsZSlcbnN1bW1hcnkoaW5jb21lX21vZGVsKVxuXG5ncm93dGhfbW9kZWwgPC0gbG0oUGVyY2VudF9CYWNoZWxvcnN+YXZnX2RlY2FkZV9ncm93dGhfcmF0ZSxkYXRhPWZ1bGxfY291bnR5X3RhYmxlKVxuc3VtbWFyeShncm93dGhfbW9kZWwpXG5cbnBvdmVydHlfbW9kZWwgPC0gbG0oUGVyY2VudF9CYWNoZWxvcnN+UGVyY2VudF9Qb3ZlcnR5LGRhdGE9ZnVsbF9jb3VudHlfdGFibGUpXG5zdW1tYXJ5KHBvdmVydHlfbW9kZWwpXG5gYGAifQ== -->
+<pre class="r"><code>income_model &lt;- lm(Percent_Bachelors~Median_Household_Income_2019,data=full_county_table)
 summary(income_model)
 
 growth_model &lt;- lm(Percent_Bachelors~avg_decade_growth_rate,data=full_county_table)
 summary(growth_model)
 
 poverty_model &lt;- lm(Percent_Bachelors~Percent_Poverty,data=full_county_table)
-summary(poverty_model)
-</code></pre>
-<pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-chunk-end --&gt;
-
-
-&lt;!-- rnb-text-begin --&gt;
-
-
-The greatest single indicator of county-level education that we examined is median income. According to the linear model I created, median income accounts for 50.76% of the variation among counties in percentage of people receiving a bachelors degree. 
-
-
-
-&lt;!-- rnb-text-end --&gt;
-
-
-&lt;!-- rnb-chunk-begin --&gt;
-
-
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuaW5jb21lX25vX2RpcGxvbWFfbW9kZWwgPC0gbG0oTWVkaWFuX0hvdXNlaG9sZF9JbmNvbWVfMjAxOX5QZXJjZW50X05vX0RpcGxvbWEsZGF0YT1pbmNfZWR1X2NvdW50eSlcbnN1bW1hcnkoaW5jb21lX25vX2RpcGxvbWFfbW9kZWwpXG5cbnBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsIDwtIGxtKFBlcmNlbnRfTm9fRGlwbG9tYX5QZXJjZW50X0JhY2hlbG9ycyxkYXRhPWluY19lZHVfY291bnR5KVxuc3VtbWFyeShwZXJjZW50X2JhY2hfbm9fZGlwbG9tYV9tb2RlbClcblxucGVyY2VudF9iYWNoX25vX2RpcGxvbWFfbW9kZWwgPC0gbG0oUGVyY2VudF9Ob19EaXBsb21hflBlcmNlbnRfQmFjaGVsb3JzLGRhdGE9aW5jX2VkdV9jb3VudHkpXG5zdW1tYXJ5KHBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsKVxuYGBgXG5gYGAifQ== --&gt;
-
-```r
-```r
-income_no_diploma_model &lt;- lm(Median_Household_Income_2019~Percent_No_Diploma,data=inc_edu_county)
+summary(poverty_model)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>The greatest single indicator of county-level education that we examined is median income. According to the linear model I created, median income accounts for 50.76% of the variation among counties in percentage of people receiving a bachelors degree.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5jb21lX25vX2RpcGxvbWFfbW9kZWwgPC0gbG0oTWVkaWFuX0hvdXNlaG9sZF9JbmNvbWVfMjAxOX5QZXJjZW50X05vX0RpcGxvbWEsZGF0YT1pbmNfZWR1X2NvdW50eSlcbnN1bW1hcnkoaW5jb21lX25vX2RpcGxvbWFfbW9kZWwpXG5cbnBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsIDwtIGxtKFBlcmNlbnRfTm9fRGlwbG9tYX5QZXJjZW50X0JhY2hlbG9ycyxkYXRhPWluY19lZHVfY291bnR5KVxuc3VtbWFyeShwZXJjZW50X2JhY2hfbm9fZGlwbG9tYV9tb2RlbClcblxucGVyY2VudF9iYWNoX25vX2RpcGxvbWFfbW9kZWwgPC0gbG0oUGVyY2VudF9Ob19EaXBsb21hflBlcmNlbnRfQmFjaGVsb3JzLGRhdGE9aW5jX2VkdV9jb3VudHkpXG5zdW1tYXJ5KHBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsKVxuYGBgIn0= -->
+<pre class="r"><code>income_no_diploma_model &lt;- lm(Median_Household_Income_2019~Percent_No_Diploma,data=inc_edu_county)
 summary(income_no_diploma_model)
 
 percent_bach_no_diploma_model &lt;- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
@@ -285,76 +250,31 @@ summary(percent_bach_no_diploma_model)
 
 percent_bach_no_diploma_model &lt;- lm(Percent_No_Diploma~Percent_Bachelors,data=inc_edu_county)
 summary(percent_bach_no_diploma_model)</code></pre>
-<pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-chunk-end --&gt;
-
-
-&lt;!-- rnb-text-begin --&gt;
-
-
-
-Multiple Linear Regression Models:
-
-
-&lt;!-- rnb-text-end --&gt;
-
-
-&lt;!-- rnb-chunk-begin --&gt;
-
-
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxubXVsdGlfbW9kZWwgPC0gbG0oUGVyY2VudF9CYWNoZWxvcnN+TWVkaWFuX0hvdXNlaG9sZF9JbmNvbWVfMjAxOSthdmdfZGVjYWRlX2dyb3d0aF9yYXRlK1BlcmNlbnRfUG92ZXJ0eSxkYXRhPWZ1bGxfY291bnR5X3RhYmxlKVxuc3VtbWFyeShtdWx0aV9tb2RlbClcblxuYGBgXG5gYGAifQ== --&gt;
-
-```r
-```r
-multi_model &lt;- lm(Percent_Bachelors~Median_Household_Income_2019+avg_decade_growth_rate+Percent_Poverty,data=full_county_table)
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Multiple Linear Regression Models:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXVsdGlfbW9kZWwgPC0gbG0oUGVyY2VudF9CYWNoZWxvcnN+TWVkaWFuX0hvdXNlaG9sZF9JbmNvbWVfMjAxOSthdmdfZGVjYWRlX2dyb3d0aF9yYXRlK1BlcmNlbnRfUG92ZXJ0eSxkYXRhPWZ1bGxfY291bnR5X3RhYmxlKVxuc3VtbWFyeShtdWx0aV9tb2RlbClcblxuYGBgIn0= -->
+<pre class="r"><code>multi_model &lt;- lm(Percent_Bachelors~Median_Household_Income_2019+avg_decade_growth_rate+Percent_Poverty,data=full_county_table)
 summary(multi_model)
 </code></pre>
-<pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-chunk-end --&gt;
-
-
-&lt;!-- rnb-text-begin --&gt;
-
-
-
-&lt;!-- rnb-text-end --&gt;
-
-
-&lt;!-- rnb-chunk-begin --&gt;
-
-
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZGVuc2l0eVBsb3QoaW5jX2VkdV9jb3VudHkkUGVyY2VudF9CYWNoZWxvcnMsIFxcRGVuc2l0eSBQbG90XFwsIFxcUGVyY2VudCBCYWNoZWxvcnNcXClcbmBgYFxuYGBgIn0= --&gt;
-
-```r
-```r
-densityPlot(inc_edu_county$Percent_Bachelors, \Density Plot\, \Percent Bachelors\)</code></pre>
-<pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-chunk-end --&gt;
-
-
-&lt;!-- rnb-text-begin --&gt;
-
-  
-County Table Grouped By Urban Classification
-
-
-&lt;!-- rnb-text-end --&gt;
-
-
-&lt;!-- rnb-chunk-begin --&gt;
-
-
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuYmFjaF91cmJhbl9jbGFzcyA8LSBmdWxsX2NvdW50eV90YWJsZSAlPiVcbmdyb3VwX2J5KFJ1cmFsX3VyYmFuX2NvZGUpJT4lXG4gIHN1bW1hcmlzZV9hdCh2YXJzKFBlcmNlbnRfQmFjaGVsb3JzKSxmdW5zKG1lYW4oUGVyY2VudF9CYWNoZWxvcnMpKSlcblxubm9fZGlwbG9tYV91cmJhbl9jbGFzcyA8LSBmdWxsX2NvdW50eV90YWJsZSAlPiVcbmdyb3VwX2J5KFJ1cmFsX3VyYmFuX2NvZGUpJT4lXG4gIHN1bW1hcmlzZV9hdCh2YXJzKFBlcmNlbnRfTm9fRGlwbG9tYSksZnVucyhtZWFuKFBlcmNlbnRfTm9fRGlwbG9tYSkpKVxuXG5kaXBsb21hX3VyYmFuX2NsYXNzIDwtIGZ1bGxfY291bnR5X3RhYmxlICU+JVxuZ3JvdXBfYnkoUnVyYWxfdXJiYW5fY29kZSklPiVcbiAgc3VtbWFyaXNlX2F0KHZhcnMoUGVyY2VudF9EaXBsb21hKSxmdW5zKG1lYW4oUGVyY2VudF9EaXBsb21hKSkpXG5cbmFzc29jX3VyYmFuX2NsYXNzIDwtIGZ1bGxfY291bnR5X3RhYmxlICU+JVxuZ3JvdXBfYnkoUnVyYWxfdXJiYW5fY29kZSklPiVcbiAgc3VtbWFyaXNlX2F0KHZhcnMoUGVyY2VudF9Bc3NvY2lhdGVzKSxmdW5zKG1lYW4oUGVyY2VudF9Bc3NvY2lhdGVzKSkpXG5cbmdyb3VwX2J5X3VyYl90YWJsZSA8LSBSZWR1Y2UoZnVuY3Rpb24oLi4uKSBtZXJnZSguLi4sIGFsbCA9IFRSVUUsIGJ5ID0gXFxSdXJhbF91cmJhbl9jb2RlXFwpLFxuICBsaXN0KG5vX2RpcGxvbWFfdXJiYW5fY2xhc3MsIGRpcGxvbWFfdXJiYW5fY2xhc3MsIGFzc29jX3VyYmFuX2NsYXNzLCBiYWNoX3VyYmFuX2NsYXNzKSlcblxuYGBgXG5gYGAifQ== --&gt;
-
-```r
-```r
-bach_urban_class &lt;- full_county_table %&gt;%
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVuc2l0eVBsb3QoaW5jX2VkdV9jb3VudHkkUGVyY2VudF9CYWNoZWxvcnMsIFwiRGVuc2l0eSBQbG90XCIsIFwiUGVyY2VudCBCYWNoZWxvcnNcIilcbmBgYCJ9 -->
+<pre class="r"><code>densityPlot(inc_edu_county$Percent_Bachelors, &quot;Density Plot&quot;, &quot;Percent Bachelors&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>County Table Grouped By Urban Classification</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmFjaF91cmJhbl9jbGFzcyA8LSBmdWxsX2NvdW50eV90YWJsZSAlPiVcbmdyb3VwX2J5KFJ1cmFsX3VyYmFuX2NvZGUpJT4lXG4gIHN1bW1hcmlzZV9hdCh2YXJzKFBlcmNlbnRfQmFjaGVsb3JzKSxmdW5zKG1lYW4oUGVyY2VudF9CYWNoZWxvcnMpKSlcblxubm9fZGlwbG9tYV91cmJhbl9jbGFzcyA8LSBmdWxsX2NvdW50eV90YWJsZSAlPiVcbmdyb3VwX2J5KFJ1cmFsX3VyYmFuX2NvZGUpJT4lXG4gIHN1bW1hcmlzZV9hdCh2YXJzKFBlcmNlbnRfTm9fRGlwbG9tYSksZnVucyhtZWFuKFBlcmNlbnRfTm9fRGlwbG9tYSkpKVxuXG5kaXBsb21hX3VyYmFuX2NsYXNzIDwtIGZ1bGxfY291bnR5X3RhYmxlICU+JVxuZ3JvdXBfYnkoUnVyYWxfdXJiYW5fY29kZSklPiVcbiAgc3VtbWFyaXNlX2F0KHZhcnMoUGVyY2VudF9EaXBsb21hKSxmdW5zKG1lYW4oUGVyY2VudF9EaXBsb21hKSkpXG5cbmFzc29jX3VyYmFuX2NsYXNzIDwtIGZ1bGxfY291bnR5X3RhYmxlICU+JVxuZ3JvdXBfYnkoUnVyYWxfdXJiYW5fY29kZSklPiVcbiAgc3VtbWFyaXNlX2F0KHZhcnMoUGVyY2VudF9Bc3NvY2lhdGVzKSxmdW5zKG1lYW4oUGVyY2VudF9Bc3NvY2lhdGVzKSkpXG5cbmBgYCJ9 -->
+<pre class="r"><code>bach_urban_class &lt;- full_county_table %&gt;%
 group_by(Rural_urban_code)%&gt;%
   summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))
 
@@ -369,33 +289,15 @@ group_by(Rural_urban_code)%&gt;%
 assoc_urban_class &lt;- full_county_table %&gt;%
 group_by(Rural_urban_code)%&gt;%
   summarise_at(vars(Percent_Associates),funs(mean(Percent_Associates)))
-
-group_by_urb_table &lt;- Reduce(function(...) merge(..., all = TRUE, by = \Rural_urban_code\),
-  list(no_diploma_urban_class, diploma_urban_class, assoc_urban_class, bach_urban_class))
 </code></pre>
-<pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-chunk-end --&gt;
-
-
-&lt;!-- rnb-text-begin --&gt;
-
-
-#Graphs:
-
-
-&lt;!-- rnb-text-end --&gt;
-
-
-&lt;!-- rnb-chunk-begin --&gt;
-
-
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuXG5iYWNoX3BvaW50KGZ1bGxfY291bnR5X3RhYmxlJE1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTkpXG5iYWNoX3Ntb290aChmdWxsX2NvdW50eV90YWJsZSRNZWRpYW5fSG91c2Vob2xkX0luY29tZV8yMDE5KVxuXG5iYWNoX3BvaW50KGZ1bGxfY291bnR5X3RhYmxlJGF2Z19kZWNhZGVfZ3Jvd3RoX3JhdGUpXG5iYWNoX3Ntb290aChmdWxsX2NvdW50eV90YWJsZSRhdmdfZGVjYWRlX2dyb3d0aF9yYXRlKVxuXG5iYWNoX3BvaW50KGZ1bGxfY291bnR5X3RhYmxlJFBlcmNlbnRfUG92ZXJ0eSlcbmJhY2hfc21vb3RoKGZ1bGxfY291bnR5X3RhYmxlJFBlcmNlbnRfUG92ZXJ0eSlcblxuYmFjaF9ib3hwbG90KGZ1bGxfY291bnR5X3RhYmxlJFJ1cmFsX3VyYmFuX2NvZGUpXG5cbmBgYFxuYGBgIn0= --&gt;
-
-```r
-```r
-
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Graphs:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5iYWNoX3BvaW50KGZ1bGxfY291bnR5X3RhYmxlJE1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTkpXG5iYWNoX3Ntb290aChmdWxsX2NvdW50eV90YWJsZSRNZWRpYW5fSG91c2Vob2xkX0luY29tZV8yMDE5KVxuXG5iYWNoX3BvaW50KGZ1bGxfY291bnR5X3RhYmxlJGF2Z19kZWNhZGVfZ3Jvd3RoX3JhdGUpXG5iYWNoX3Ntb290aChmdWxsX2NvdW50eV90YWJsZSRhdmdfZGVjYWRlX2dyb3d0aF9yYXRlKVxuXG5iYWNoX3BvaW50KGZ1bGxfY291bnR5X3RhYmxlJFBlcmNlbnRfUG92ZXJ0eSlcbmJhY2hfc21vb3RoKGZ1bGxfY291bnR5X3RhYmxlJFBlcmNlbnRfUG92ZXJ0eSlcblxuYmFjaF9ib3hwbG90KGZ1bGxfY291bnR5X3RhYmxlJFJ1cmFsX3VyYmFuX2NvZGUpXG5cbmBgYCJ9 -->
+<pre class="r"><code>
 bach_point(full_county_table$Median_Household_Income_2019)
 bach_smooth(full_county_table$Median_Household_Income_2019)
 
@@ -407,30 +309,16 @@ bach_smooth(full_county_table$Percent_Poverty)
 
 bach_boxplot(full_county_table$Rural_urban_code)
 </code></pre>
-<pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-chunk-end --&gt;
-
-
-&lt;!-- rnb-text-begin --&gt;
-
-
-
-&lt;!-- rnb-text-end --&gt;
-
-
-&lt;!-- rnb-chunk-begin --&gt;
-
-
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZGVuc2l0eVBsb3QgPSBmdW5jdGlvbih4X3ZhciwgcGxvdF9uYW1lLCB4X25hbWUpe1xuICB4IDwtIG5hLm9taXQoeClcbiAgaGlzdCh4X3ZhciwgY29sID0gXFxyZWRcXCwgYm9yZGVyID0gXFxibGFja1xcLCBwcm9iID0gVFJVRSwgbWFpbiA9IHBsb3RfbmFtZSwgeGxhYiA9IHhfbmFtZSlcbiAgbGluZXMoZGVuc2l0eSh4X3ZhciksIGNvbCA9IFxcYmx1ZVxcLCBsd2QgPSAyKVxufVxuXG5iYWNoX3BvaW50ID0gZnVuY3Rpb24oeF92YXIpe1xuICBnZ3Bsb3QoZnVsbF9jb3VudHlfdGFibGUsIGFlcyh4X3ZhciwgUGVyY2VudF9CYWNoZWxvcnMpKStcbiAgZ2VvbV9wb2ludCgpXG59XG5cbmJhY2hfc21vb3RoID0gZnVuY3Rpb24oeF92YXIpe1xuICBnZ3Bsb3QoZnVsbF9jb3VudHlfdGFibGUsIGFlcyh4X3ZhciwgUGVyY2VudF9CYWNoZWxvcnMpKStcbiAgZ2VvbV9zbW9vdGgoKVxufVxuXG5iYWNoX2JveHBsb3QgPSBmdW5jdGlvbih4X3Zhcil7XG4gIGdncGxvdChmdWxsX2NvdW50eV90YWJsZSwgYWVzKHhfdmFyLCBQZXJjZW50X0JhY2hlbG9ycykpK1xuICBnZW9tX2JveHBsb3QoKVxufVxuXG51cmJfY29sIDwtIGZ1bmN0aW9uKHlfdmFyKXtcbiAgZ2dwbG90KGdyb3VwZWRfYnlfdXJiYW5fY2xhc3MsIGFlcyhSdXJhbF91cmJhbl9jb2RlLHlfdmFyLGZpbGwgPSBSdXJhbF91cmJhbl9jb2RlKSkrXG4gIGdlb21fY29sKCkrXG4gIHRoZW1lKGxlZ2VuZC5wb3NpdGlvbiA9IFxcbm9uZVxcKVxufVxuXG4gIFxuXG5gYGBcbmBgYCJ9 --&gt;
-
-```r
-```r
-densityPlot = function(x_var, plot_name, x_name){
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVuc2l0eVBsb3QgPSBmdW5jdGlvbih4LCBwbG90X25hbWUsIHhfbmFtZSl7XG4gIHggPC0gbmEub21pdCh4KVxuICBoaXN0KHhfdmFyLCBjb2wgPSBcInJlZFwiLCBib3JkZXIgPSBcImJsYWNrXCIsIHByb2IgPSBUUlVFLCBtYWluID0gcGxvdF9uYW1lLCB4bGFiID0geF9uYW1lKVxuICBsaW5lcyhkZW5zaXR5KHhfdmFyKSwgY29sID0gXCJibHVlXCIsIGx3ZCA9IDIpXG59XG5cbmJhY2hfcG9pbnQgPSBmdW5jdGlvbih4X3Zhcil7XG4gIGdncGxvdChmdWxsX2NvdW50eV90YWJsZSwgYWVzKHhfdmFyLCBQZXJjZW50X0JhY2hlbG9ycykpK1xuICBnZW9tX3BvaW50KClcbn1cblxuYmFjaF9zbW9vdGggPSBmdW5jdGlvbih4X3Zhcil7XG4gIGdncGxvdChmdWxsX2NvdW50eV90YWJsZSwgYWVzKHhfdmFyLCBQZXJjZW50X0JhY2hlbG9ycykpK1xuICBnZW9tX3Ntb290aCgpXG59XG5cbmJhY2hfYm94cGxvdCA9IGZ1bmN0aW9uKHhfdmFyKXtcbiAgZ2dwbG90KGZ1bGxfY291bnR5X3RhYmxlLCBhZXMoeF92YXIsIFBlcmNlbnRfQmFjaGVsb3JzKSkrXG4gIGdlb21fYm94cGxvdCgpXG59XG5cbnBvaW50X2Z1bmMgPSBmdW5jdGlvbih4LHkseF9uYW1lLHlfbmFtZSl7XG4gIGdncGxvdChmdWxsX2NvdW50eV90YWJsZSwgYWVzKHhfdmFyLCBQZXJjZW50X0JhY2hlbG9ycykpK1xuICBnZW9tX3BvaW50KCkrXG4gIGxhYih4X25hbWUseV9uYW1lKVxufVxuXG51cmJfY29sIDwtIGZ1bmN0aW9uKHlfdmFyKXtcbiAgZ2dwbG90KGdyb3VwZWRfYnlfdXJiYW5fY2xhc3MsIGFlcyhSdXJhbF91cmJhbl9jb2RlLHlfdmFyLGZpbGwgPSBSdXJhbF91cmJhbl9jb2RlKSkrXG4gIGdlb21fY29sKCkrXG4gIHRoZW1lKGxlZ2VuZC5wb3NpdGlvbiA9IFwibm9uZVwiKVxufVxuYGBgIn0= -->
+<pre class="r"><code>densityPlot = function(x, plot_name, x_name){
   x &lt;- na.omit(x)
-  hist(x_var, col = \red\, border = \black\, prob = TRUE, main = plot_name, xlab = x_name)
-  lines(density(x_var), col = \blue\, lwd = 2)
+  hist(x_var, col = &quot;red&quot;, border = &quot;black&quot;, prob = TRUE, main = plot_name, xlab = x_name)
+  lines(density(x_var), col = &quot;blue&quot;, lwd = 2)
 }
 
 bach_point = function(x_var){
@@ -448,34 +336,24 @@ bach_boxplot = function(x_var){
   geom_boxplot()
 }
 
+point_func = function(x,y,x_name,y_name){
+  ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
+  geom_point()+
+  lab(x_name,y_name)
+}
+
 urb_col &lt;- function(y_var){
   ggplot(grouped_by_urban_class, aes(Rural_urban_code,y_var,fill = Rural_urban_code))+
   geom_col()+
-  theme(legend.position = \none\)
-}
-
-  
-</code></pre>
-<pre><code>
-&lt;!-- rnb-source-end --&gt;
-
-&lt;!-- rnb-chunk-end --&gt;
-
-
-&lt;!-- rnb-text-begin --&gt;
-
-
-
-&lt;!-- rnb-text-end --&gt;
-
-
-&lt;!-- rnb-chunk-begin --&gt;
-
-
-&lt;!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGdyb3VwX2J5X3VyYl90YWJsZSwgYWVzKFJ1cmFsX3VyYmFuX2NvZGUsUGVyY2VudF9Ob19EaXBsb21hLGZpbGwgPSBSdXJhbF91cmJhbl9jb2RlKSkrXG4gIGdlb21fY29sKCkrXG4gIHRoZW1lKGxlZ2VuZC5wb3NpdGlvbiA9IFwibm9uZVwiKVxuXG5nZ3Bsb3QoZ3JvdXBfYnlfdXJiX3RhYmxlLCBhZXMoUnVyYWxfdXJiYW5fY29kZSxQZXJjZW50X0RpcGxvbWEsZmlsbCA9IFJ1cmFsX3VyYmFuX2NvZGUpKStcbiAgZ2VvbV9jb2woKStcbiAgdGhlbWUobGVnZW5kLnBvc2l0aW9uID0gXCJub25lXCIpXG5cbmdncGxvdChncm91cF9ieV91cmJfdGFibGUsIGFlcyhSdXJhbF91cmJhbl9jb2RlLFBlcmNlbnRfQXNzb2NpYXRlcyxmaWxsID0gUnVyYWxfdXJiYW5fY29kZSkpK1xuICBnZW9tX2NvbCgpK1xuICB0aGVtZShsZWdlbmQucG9zaXRpb24gPSBcIm5vbmVcIilcblxuZ2dwbG90KGdyb3VwX2J5X3VyYl90YWJsZSwgYWVzKFJ1cmFsX3VyYmFuX2NvZGUsUGVyY2VudF9CYWNoZWxvcnMsZmlsbCA9IFJ1cmFsX3VyYmFuX2NvZGUpKStcbiAgZ2VvbV9jb2woKStcbiAgdGhlbWUobGVnZW5kLnBvc2l0aW9uID0gXCJub25lXCIpXG5gYGAifQ== --&gt;
-
-```r
-ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_No_Diploma,fill = Rural_urban_code))+
+  theme(legend.position = &quot;none&quot;)
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2dwbG90KGdyb3VwX2J5X3VyYl90YWJsZSwgYWVzKFJ1cmFsX3VyYmFuX2NvZGUsUGVyY2VudF9Ob19EaXBsb21hLGZpbGwgPSBSdXJhbF91cmJhbl9jb2RlKSkrXG4gIGdlb21fY29sKCkrXG4gIHRoZW1lKGxlZ2VuZC5wb3NpdGlvbiA9IFwibm9uZVwiKVxuXG5nZ3Bsb3QoZ3JvdXBfYnlfdXJiX3RhYmxlLCBhZXMoUnVyYWxfdXJiYW5fY29kZSxQZXJjZW50X0RpcGxvbWEsZmlsbCA9IFJ1cmFsX3VyYmFuX2NvZGUpKStcbiAgZ2VvbV9jb2woKStcbiAgdGhlbWUobGVnZW5kLnBvc2l0aW9uID0gXCJub25lXCIpXG5cbmdncGxvdChncm91cF9ieV91cmJfdGFibGUsIGFlcyhSdXJhbF91cmJhbl9jb2RlLFBlcmNlbnRfQXNzb2NpYXRlcyxmaWxsID0gUnVyYWxfdXJiYW5fY29kZSkpK1xuICBnZW9tX2NvbCgpK1xuICB0aGVtZShsZWdlbmQucG9zaXRpb24gPSBcIm5vbmVcIilcblxuZ2dwbG90KGdyb3VwX2J5X3VyYl90YWJsZSwgYWVzKFJ1cmFsX3VyYmFuX2NvZGUsUGVyY2VudF9CYWNoZWxvcnMsZmlsbCA9IFJ1cmFsX3VyYmFuX2NvZGUpKStcbiAgZ2VvbV9jb2woKStcbiAgdGhlbWUobGVnZW5kLnBvc2l0aW9uID0gXCJub25lXCIpXG5cbm11bHRpX2JveHBsb3QgPC1mdW5jdGlvbih4LHkseF9uYW1lLHlfbmFtZSl7IFxuIGdncGxvdChncm91cF9ieV91cmJfdGFibGUsIGFlcyh4LCB5LGdyb3VwID0gUnVyYWxfdXJiYW5fY29kZSkpK1xuICBnZW9tX2JveHBsb3QoZmlsbD1cInN0ZWVsYmx1ZVwiKStcbiAgICBsYWJzKHk9eV9uYW1lLHg9eF9uYW1lKVxufVxuYGBgIn0= -->
+<pre class="r"><code>ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_No_Diploma,fill = Rural_urban_code))+
   geom_col()+
   theme(legend.position = &quot;none&quot;)
 
@@ -489,14 +367,44 @@ ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Associates,fill = Rural_
 
 ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
   geom_col()+
-  theme(legend.position = &quot;none&quot;)</code></pre>
+  theme(legend.position = &quot;none&quot;)
+
+multi_boxplot &lt;-function(x,y,x_name,y_name){ 
+ ggplot(group_by_urb_table, aes(x, y,group = Rural_urban_code))+
+  geom_boxplot(fill=&quot;steelblue&quot;)+
+    labs(y=y_name,x=x_name)
+}</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>organized the dataframe according to our preference to establish an relationship. We have grouped the findings as per state and counties in the United States of America and visualized it through the use of plot_usmap function. This plot shows the distribution percentage of student enrollment to different programs in a county or state. Furthermore we have created correlation plot to identify the connection between income and programs enrolled, it is also made dynamic to make it easier to understand the link between two variables. In addition to it, we have performed linear model to get a deeper knowledge on the relation. We have put together all our findings in one place with the help of ‘Shiny’. We have used shiny dashboard to summarize our thoughts and process.&quot;)</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuQUxfdGFibGUgPC0gZnVsbGVyX3RibCAlPiVcbiAgZmlsdGVyKFN0YXRlPT1zdGF0ZS5hYmJbMV0pXG5cbnZlY3Rvck9mVGFibGVzIDwtbGlzdChsZW5ndGggPSA1MClcbmZvciAoaSBpbiAxOjUwKXtcbiAgI3dyaXRlLnRhYmxlKHZlY3Rvck9mVGFibGVzLGFwcGVuZCA9IFwiVFJVRVwiKVxuICB2ZWN0b3JPZlRhYmxlcy5hcHBlbmQoZnVsbGVyX3RibCAlPiUgZmlsdGVyKFN0YXRlPT1zdGF0ZS5hYmJbaV0pKVxufVxuYGBgIn0= -->
+<pre class="r"><code>AL_table &lt;- fuller_tbl %&gt;%
+  filter(State==state.abb[1])
+
+vectorOfTables &lt;-list(length = 50)
+for (i in 1:50){
+  #write.table(vectorOfTables,append = &quot;TRUE&quot;)
+  vectorOfTables.append(fuller_tbl %&gt;% filter(State==state.abb[i]))
+}</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGJsPC1ncm91cF9ieV91cmJfdGFibGVcblxubXVsdGlfYm94cGxvdCh0YmwkUnVyYWxfdXJiYW5fY29kZSx0YmwkUGVyY2VudF9Ob19EaXBsb21hLFwiUnVyYWxfdXJiYW5fY29kZVwiLFwiUGVyY2VudF9Ob19EaXBsb21hXCIpXG5cblxuYGBgIn0= -->
+<pre class="r"><code>tbl&lt;-group_by_urb_table
+
+multi_boxplot(tbl$Rural_urban_code,tbl$Percent_No_Diploma,&quot;Rural_urban_code&quot;,&quot;Percent_No_Diploma&quot;)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>(Part of) Old Summary: organized the dataframe according to our preference to establish an relationship. We have grouped the findings as per state and counties in the United States of America and visualized it through the use of plot_usmap function. This plot shows the distribution percentage of student enrollment to different programs in a county or state. Furthermore we have created correlation plot to identify the connection between income and programs enrolled, it is also made dynamic to make it easier to understand the link between two variables. In addition to it, we have performed linear model to get a deeper knowledge on the relation. We have put together all our findings in one place with the help of ‘Shiny’. We have used shiny dashboard to summarize our thoughts and process.&quot;)</p>
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiQWRkaXRpb25hbCBJbnNpZ2h0cyIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKCgpNb2RlbCBNYXRyaXg6CgpgYGB7cn0KbW9kZWwubWF0cml4KFBlcmNlbnRfQmFjaGVsb3JzflJ1cmFsX3VyYmFuX2NvZGUsZGF0YT1mdWxsX2NvdW50eV90YWJsZSkKYGBgCgoKCkxpbmVhciBSZWdyZXNzaW9uIE1vZGVsczoKCmBgYHtyIGxpbl9tb2RlbHN9CmluY29tZV9tb2RlbCA8LSBsbShQZXJjZW50X0JhY2hlbG9yc35NZWRpYW5fSG91c2Vob2xkX0luY29tZV8yMDE5LGRhdGE9ZnVsbF9jb3VudHlfdGFibGUpCnN1bW1hcnkoaW5jb21lX21vZGVsKQoKZ3Jvd3RoX21vZGVsIDwtIGxtKFBlcmNlbnRfQmFjaGVsb3JzfmF2Z19kZWNhZGVfZ3Jvd3RoX3JhdGUsZGF0YT1mdWxsX2NvdW50eV90YWJsZSkKc3VtbWFyeShncm93dGhfbW9kZWwpCgpwb3ZlcnR5X21vZGVsIDwtIGxtKFBlcmNlbnRfQmFjaGVsb3JzflBlcmNlbnRfUG92ZXJ0eSxkYXRhPWZ1bGxfY291bnR5X3RhYmxlKQpzdW1tYXJ5KHBvdmVydHlfbW9kZWwpCgoKYGBgCgpUaGUgZ3JlYXRlc3Qgc2luZ2xlIGluZGljYXRvciBvZiBjb3VudHktbGV2ZWwgZWR1Y2F0aW9uIHRoYXQgd2UgZXhhbWluZWQgaXMgbWVkaWFuIGluY29tZS4gQWNjb3JkaW5nIHRvIHRoZSBsaW5lYXIgbW9kZWwgSSBjcmVhdGVkLCBtZWRpYW4gaW5jb21lIGFjY291bnRzIGZvciA1MC43NiUgb2YgdGhlIHZhcmlhdGlvbiBhbW9uZyBjb3VudGllcyBpbiBwZXJjZW50YWdlIG9mIHBlb3BsZSByZWNlaXZpbmcgYSBiYWNoZWxvcnMgZGVncmVlLiAKCgpgYGB7ciBsaW5fbW9kZWxzX2RpcGxvbWF9CmluY29tZV9ub19kaXBsb21hX21vZGVsIDwtIGxtKE1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTl+UGVyY2VudF9Ob19EaXBsb21hLGRhdGE9aW5jX2VkdV9jb3VudHkpCnN1bW1hcnkoaW5jb21lX25vX2RpcGxvbWFfbW9kZWwpCgpwZXJjZW50X2JhY2hfbm9fZGlwbG9tYV9tb2RlbCA8LSBsbShQZXJjZW50X05vX0RpcGxvbWF+UGVyY2VudF9CYWNoZWxvcnMsZGF0YT1pbmNfZWR1X2NvdW50eSkKc3VtbWFyeShwZXJjZW50X2JhY2hfbm9fZGlwbG9tYV9tb2RlbCkKCnBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsIDwtIGxtKFBlcmNlbnRfTm9fRGlwbG9tYX5QZXJjZW50X0JhY2hlbG9ycyxkYXRhPWluY19lZHVfY291bnR5KQpzdW1tYXJ5KHBlcmNlbnRfYmFjaF9ub19kaXBsb21hX21vZGVsKQpgYGAKCgpNdWx0aXBsZSBMaW5lYXIgUmVncmVzc2lvbiBNb2RlbHM6CgpgYGB7ciBtdWx0aV9tb2RlbHN9Cm11bHRpX21vZGVsIDwtIGxtKFBlcmNlbnRfQmFjaGVsb3Jzfk1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTkrYXZnX2RlY2FkZV9ncm93dGhfcmF0ZStQZXJjZW50X1BvdmVydHksZGF0YT1mdWxsX2NvdW50eV90YWJsZSkKc3VtbWFyeShtdWx0aV9tb2RlbCkKCmBgYAoKYGBge3IgZGVuc2l0eV9wbG90X2JhY2h9CmRlbnNpdHlQbG90KGluY19lZHVfY291bnR5JFBlcmNlbnRfQmFjaGVsb3JzLCAiRGVuc2l0eSBQbG90IiwgIlBlcmNlbnQgQmFjaGVsb3JzIikKYGBgCiAgCkNvdW50eSBUYWJsZSBHcm91cGVkIEJ5IFVyYmFuIENsYXNzaWZpY2F0aW9uCgpgYGB7ciBncm91cF9ieV91cmJ9CmJhY2hfdXJiYW5fY2xhc3MgPC0gZnVsbF9jb3VudHlfdGFibGUgJT4lCmdyb3VwX2J5KFJ1cmFsX3VyYmFuX2NvZGUpJT4lCiAgc3VtbWFyaXNlX2F0KHZhcnMoUGVyY2VudF9CYWNoZWxvcnMpLGZ1bnMobWVhbihQZXJjZW50X0JhY2hlbG9ycykpKQoKbm9fZGlwbG9tYV91cmJhbl9jbGFzcyA8LSBmdWxsX2NvdW50eV90YWJsZSAlPiUKZ3JvdXBfYnkoUnVyYWxfdXJiYW5fY29kZSklPiUKICBzdW1tYXJpc2VfYXQodmFycyhQZXJjZW50X05vX0RpcGxvbWEpLGZ1bnMobWVhbihQZXJjZW50X05vX0RpcGxvbWEpKSkKCmRpcGxvbWFfdXJiYW5fY2xhc3MgPC0gZnVsbF9jb3VudHlfdGFibGUgJT4lCmdyb3VwX2J5KFJ1cmFsX3VyYmFuX2NvZGUpJT4lCiAgc3VtbWFyaXNlX2F0KHZhcnMoUGVyY2VudF9EaXBsb21hKSxmdW5zKG1lYW4oUGVyY2VudF9EaXBsb21hKSkpCgphc3NvY191cmJhbl9jbGFzcyA8LSBmdWxsX2NvdW50eV90YWJsZSAlPiUKZ3JvdXBfYnkoUnVyYWxfdXJiYW5fY29kZSklPiUKICBzdW1tYXJpc2VfYXQodmFycyhQZXJjZW50X0Fzc29jaWF0ZXMpLGZ1bnMobWVhbihQZXJjZW50X0Fzc29jaWF0ZXMpKSkKCmBgYAoKI0dyYXBoczoKCmBgYHtyIGdyYXBoc30KCmJhY2hfcG9pbnQoZnVsbF9jb3VudHlfdGFibGUkTWVkaWFuX0hvdXNlaG9sZF9JbmNvbWVfMjAxOSkKYmFjaF9zbW9vdGgoZnVsbF9jb3VudHlfdGFibGUkTWVkaWFuX0hvdXNlaG9sZF9JbmNvbWVfMjAxOSkKCmJhY2hfcG9pbnQoZnVsbF9jb3VudHlfdGFibGUkYXZnX2RlY2FkZV9ncm93dGhfcmF0ZSkKYmFjaF9zbW9vdGgoZnVsbF9jb3VudHlfdGFibGUkYXZnX2RlY2FkZV9ncm93dGhfcmF0ZSkKCmJhY2hfcG9pbnQoZnVsbF9jb3VudHlfdGFibGUkUGVyY2VudF9Qb3ZlcnR5KQpiYWNoX3Ntb290aChmdWxsX2NvdW50eV90YWJsZSRQZXJjZW50X1BvdmVydHkpCgpiYWNoX2JveHBsb3QoZnVsbF9jb3VudHlfdGFibGUkUnVyYWxfdXJiYW5fY29kZSkKCmBgYAoKYGBge3IgZnVuY3Rpb25zfQpkZW5zaXR5UGxvdCA9IGZ1bmN0aW9uKHhfdmFyLCBwbG90X25hbWUsIHhfbmFtZSl7CiAgeCA8LSBuYS5vbWl0KHgpCiAgaGlzdCh4X3ZhciwgY29sID0gInJlZCIsIGJvcmRlciA9ICJibGFjayIsIHByb2IgPSBUUlVFLCBtYWluID0gcGxvdF9uYW1lLCB4bGFiID0geF9uYW1lKQogIGxpbmVzKGRlbnNpdHkoeF92YXIpLCBjb2wgPSAiYmx1ZSIsIGx3ZCA9IDIpCn0KCmJhY2hfcG9pbnQgPSBmdW5jdGlvbih4X3Zhcil7CiAgZ2dwbG90KGZ1bGxfY291bnR5X3RhYmxlLCBhZXMoeF92YXIsIFBlcmNlbnRfQmFjaGVsb3JzKSkrCiAgZ2VvbV9wb2ludCgpCn0KCmJhY2hfc21vb3RoID0gZnVuY3Rpb24oeF92YXIpewogIGdncGxvdChmdWxsX2NvdW50eV90YWJsZSwgYWVzKHhfdmFyLCBQZXJjZW50X0JhY2hlbG9ycykpKwogIGdlb21fc21vb3RoKCkKfQoKYmFjaF9ib3hwbG90ID0gZnVuY3Rpb24oeF92YXIpewogIGdncGxvdChmdWxsX2NvdW50eV90YWJsZSwgYWVzKHhfdmFyLCBQZXJjZW50X0JhY2hlbG9ycykpKwogIGdlb21fYm94cGxvdCgpCn0KCnVyYl9jb2wgPC0gZnVuY3Rpb24oeV92YXIpewogIGdncGxvdChncm91cGVkX2J5X3VyYmFuX2NsYXNzLCBhZXMoUnVyYWxfdXJiYW5fY29kZSx5X3ZhcixmaWxsID0gUnVyYWxfdXJiYW5fY29kZSkpKwogIGdlb21fY29sKCkrCiAgdGhlbWUobGVnZW5kLnBvc2l0aW9uID0gIm5vbmUiKQp9CmBgYAoKYGBge3IgZ3JvdXBfYnlfdXJiX2dyYXBoc30KZ2dwbG90KGdyb3VwX2J5X3VyYl90YWJsZSwgYWVzKFJ1cmFsX3VyYmFuX2NvZGUsUGVyY2VudF9Ob19EaXBsb21hLGZpbGwgPSBSdXJhbF91cmJhbl9jb2RlKSkrCiAgZ2VvbV9jb2woKSsKICB0aGVtZShsZWdlbmQucG9zaXRpb24gPSAibm9uZSIpCgpnZ3Bsb3QoZ3JvdXBfYnlfdXJiX3RhYmxlLCBhZXMoUnVyYWxfdXJiYW5fY29kZSxQZXJjZW50X0RpcGxvbWEsZmlsbCA9IFJ1cmFsX3VyYmFuX2NvZGUpKSsKICBnZW9tX2NvbCgpKwogIHRoZW1lKGxlZ2VuZC5wb3NpdGlvbiA9ICJub25lIikKCmdncGxvdChncm91cF9ieV91cmJfdGFibGUsIGFlcyhSdXJhbF91cmJhbl9jb2RlLFBlcmNlbnRfQXNzb2NpYXRlcyxmaWxsID0gUnVyYWxfdXJiYW5fY29kZSkpKwogIGdlb21fY29sKCkrCiAgdGhlbWUobGVnZW5kLnBvc2l0aW9uID0gIm5vbmUiKQoKZ2dwbG90KGdyb3VwX2J5X3VyYl90YWJsZSwgYWVzKFJ1cmFsX3VyYmFuX2NvZGUsUGVyY2VudF9CYWNoZWxvcnMsZmlsbCA9IFJ1cmFsX3VyYmFuX2NvZGUpKSsKICBnZW9tX2NvbCgpKwogIHRoZW1lKGxlZ2VuZC5wb3NpdGlvbiA9ICJub25lIikKYGBgCgogIG9yZ2FuaXplZCB0aGUgZGF0YWZyYW1lIGFjY29yZGluZyB0byBvdXIgcHJlZmVyZW5jZSB0byBlc3RhYmxpc2ggYW4gcmVsYXRpb25zaGlwLgogICAgICAgICAgV2UgaGF2ZSBncm91cGVkIHRoZSBmaW5kaW5ncyBhcyBwZXIgc3RhdGUgYW5kIGNvdW50aWVzIGluIHRoZSBVbml0ZWQgU3RhdGVzIG9mIEFtZXJpY2EgYW5kIHZpc3VhbGl6ZWQgaXQgdGhyb3VnaCB0aGUgdXNlIG9mIHBsb3RfdXNtYXAgZnVuY3Rpb24uCiAgICAgICAgICBUaGlzIHBsb3Qgc2hvd3MgdGhlIGRpc3RyaWJ1dGlvbiBwZXJjZW50YWdlIG9mIHN0dWRlbnQgZW5yb2xsbWVudCB0byBkaWZmZXJlbnQgcHJvZ3JhbXMgaW4gYSBjb3VudHkgb3Igc3RhdGUuCiAgICAgICAgICBGdXJ0aGVybW9yZSB3ZSBoYXZlIGNyZWF0ZWQgY29ycmVsYXRpb24gcGxvdCB0byBpZGVudGlmeSB0aGUgY29ubmVjdGlvbiBiZXR3ZWVuIGluY29tZSBhbmQgcHJvZ3JhbXMgZW5yb2xsZWQsIGl0IGlzIGFsc28gbWFkZSBkeW5hbWljIHRvIG1ha2UgaXQgZWFzaWVyIHRvIHVuZGVyc3RhbmQgdGhlIGxpbmsgYmV0d2VlbiB0d28gdmFyaWFibGVzLgogICAgICAgICAgSW4gYWRkaXRpb24gdG8gaXQsIHdlIGhhdmUgcGVyZm9ybWVkIGxpbmVhciBtb2RlbCB0byBnZXQgYSBkZWVwZXIga25vd2xlZGdlIG9uIHRoZSByZWxhdGlvbi4KICAgICAgICAgIFdlIGhhdmUgcHV0IHRvZ2V0aGVyIGFsbCBvdXIgZmluZGluZ3MgaW4gb25lIHBsYWNlIHdpdGggdGhlIGhlbHAgb2YgJ1NoaW55Jy4KICAgICAgICAgIFdlIGhhdmUgdXNlZCBzaGlueSBkYXNoYm9hcmQgdG8gc3VtbWFyaXplIG91ciB0aG91Z2h0cyBhbmQgcHJvY2Vzcy4iKQ==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiQWRkaXRpb25hbCBJbnNpZ2h0cyIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKCgpNb2RlbCBNYXRyaXg6CgpgYGB7cn0KbW9kZWwubWF0cml4KFBlcmNlbnRfQmFjaGVsb3JzflJ1cmFsX3VyYmFuX2NvZGUsZGF0YT1mdWxsX2NvdW50eV90YWJsZSkKYGBgCgoKCkxpbmVhciBSZWdyZXNzaW9uIE1vZGVsczoKCmBgYHtyIGxpbl9tb2RlbHN9CmluY29tZV9tb2RlbCA8LSBsbShQZXJjZW50X0JhY2hlbG9yc35NZWRpYW5fSG91c2Vob2xkX0luY29tZV8yMDE5LGRhdGE9ZnVsbF9jb3VudHlfdGFibGUpCnN1bW1hcnkoaW5jb21lX21vZGVsKQoKZ3Jvd3RoX21vZGVsIDwtIGxtKFBlcmNlbnRfQmFjaGVsb3JzfmF2Z19kZWNhZGVfZ3Jvd3RoX3JhdGUsZGF0YT1mdWxsX2NvdW50eV90YWJsZSkKc3VtbWFyeShncm93dGhfbW9kZWwpCgpwb3ZlcnR5X21vZGVsIDwtIGxtKFBlcmNlbnRfQmFjaGVsb3JzflBlcmNlbnRfUG92ZXJ0eSxkYXRhPWZ1bGxfY291bnR5X3RhYmxlKQpzdW1tYXJ5KHBvdmVydHlfbW9kZWwpCmBgYAoKVGhlIGdyZWF0ZXN0IHNpbmdsZSBpbmRpY2F0b3Igb2YgY291bnR5LWxldmVsIGVkdWNhdGlvbiB0aGF0IHdlIGV4YW1pbmVkIGlzIG1lZGlhbiBpbmNvbWUuIEFjY29yZGluZyB0byB0aGUgbGluZWFyIG1vZGVsIEkgY3JlYXRlZCwgbWVkaWFuIGluY29tZSBhY2NvdW50cyBmb3IgNTAuNzYlIG9mIHRoZSB2YXJpYXRpb24gYW1vbmcgY291bnRpZXMgaW4gcGVyY2VudGFnZSBvZiBwZW9wbGUgcmVjZWl2aW5nIGEgYmFjaGVsb3JzIGRlZ3JlZS4gCgoKYGBge3IgbGluX21vZGVsc19kaXBsb21hfQppbmNvbWVfbm9fZGlwbG9tYV9tb2RlbCA8LSBsbShNZWRpYW5fSG91c2Vob2xkX0luY29tZV8yMDE5flBlcmNlbnRfTm9fRGlwbG9tYSxkYXRhPWluY19lZHVfY291bnR5KQpzdW1tYXJ5KGluY29tZV9ub19kaXBsb21hX21vZGVsKQoKcGVyY2VudF9iYWNoX25vX2RpcGxvbWFfbW9kZWwgPC0gbG0oUGVyY2VudF9Ob19EaXBsb21hflBlcmNlbnRfQmFjaGVsb3JzLGRhdGE9aW5jX2VkdV9jb3VudHkpCnN1bW1hcnkocGVyY2VudF9iYWNoX25vX2RpcGxvbWFfbW9kZWwpCgpwZXJjZW50X2JhY2hfbm9fZGlwbG9tYV9tb2RlbCA8LSBsbShQZXJjZW50X05vX0RpcGxvbWF+UGVyY2VudF9CYWNoZWxvcnMsZGF0YT1pbmNfZWR1X2NvdW50eSkKc3VtbWFyeShwZXJjZW50X2JhY2hfbm9fZGlwbG9tYV9tb2RlbCkKYGBgCgoKTXVsdGlwbGUgTGluZWFyIFJlZ3Jlc3Npb24gTW9kZWxzOgoKYGBge3IgbXVsdGlfbW9kZWxzfQptdWx0aV9tb2RlbCA8LSBsbShQZXJjZW50X0JhY2hlbG9yc35NZWRpYW5fSG91c2Vob2xkX0luY29tZV8yMDE5K2F2Z19kZWNhZGVfZ3Jvd3RoX3JhdGUrUGVyY2VudF9Qb3ZlcnR5LGRhdGE9ZnVsbF9jb3VudHlfdGFibGUpCnN1bW1hcnkobXVsdGlfbW9kZWwpCgpgYGAKCmBgYHtyIGRlbnNpdHlfcGxvdF9iYWNofQpkZW5zaXR5UGxvdChpbmNfZWR1X2NvdW50eSRQZXJjZW50X0JhY2hlbG9ycywgIkRlbnNpdHkgUGxvdCIsICJQZXJjZW50IEJhY2hlbG9ycyIpCmBgYAogIApDb3VudHkgVGFibGUgR3JvdXBlZCBCeSBVcmJhbiBDbGFzc2lmaWNhdGlvbgoKYGBge3IgZ3JvdXBfYnlfdXJifQpiYWNoX3VyYmFuX2NsYXNzIDwtIGZ1bGxfY291bnR5X3RhYmxlICU+JQpncm91cF9ieShSdXJhbF91cmJhbl9jb2RlKSU+JQogIHN1bW1hcmlzZV9hdCh2YXJzKFBlcmNlbnRfQmFjaGVsb3JzKSxmdW5zKG1lYW4oUGVyY2VudF9CYWNoZWxvcnMpKSkKCm5vX2RpcGxvbWFfdXJiYW5fY2xhc3MgPC0gZnVsbF9jb3VudHlfdGFibGUgJT4lCmdyb3VwX2J5KFJ1cmFsX3VyYmFuX2NvZGUpJT4lCiAgc3VtbWFyaXNlX2F0KHZhcnMoUGVyY2VudF9Ob19EaXBsb21hKSxmdW5zKG1lYW4oUGVyY2VudF9Ob19EaXBsb21hKSkpCgpkaXBsb21hX3VyYmFuX2NsYXNzIDwtIGZ1bGxfY291bnR5X3RhYmxlICU+JQpncm91cF9ieShSdXJhbF91cmJhbl9jb2RlKSU+JQogIHN1bW1hcmlzZV9hdCh2YXJzKFBlcmNlbnRfRGlwbG9tYSksZnVucyhtZWFuKFBlcmNlbnRfRGlwbG9tYSkpKQoKYXNzb2NfdXJiYW5fY2xhc3MgPC0gZnVsbF9jb3VudHlfdGFibGUgJT4lCmdyb3VwX2J5KFJ1cmFsX3VyYmFuX2NvZGUpJT4lCiAgc3VtbWFyaXNlX2F0KHZhcnMoUGVyY2VudF9Bc3NvY2lhdGVzKSxmdW5zKG1lYW4oUGVyY2VudF9Bc3NvY2lhdGVzKSkpCgpgYGAKCiNHcmFwaHM6CgpgYGB7ciBncmFwaHN9CgpiYWNoX3BvaW50KGZ1bGxfY291bnR5X3RhYmxlJE1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTkpCmJhY2hfc21vb3RoKGZ1bGxfY291bnR5X3RhYmxlJE1lZGlhbl9Ib3VzZWhvbGRfSW5jb21lXzIwMTkpCgpiYWNoX3BvaW50KGZ1bGxfY291bnR5X3RhYmxlJGF2Z19kZWNhZGVfZ3Jvd3RoX3JhdGUpCmJhY2hfc21vb3RoKGZ1bGxfY291bnR5X3RhYmxlJGF2Z19kZWNhZGVfZ3Jvd3RoX3JhdGUpCgpiYWNoX3BvaW50KGZ1bGxfY291bnR5X3RhYmxlJFBlcmNlbnRfUG92ZXJ0eSkKYmFjaF9zbW9vdGgoZnVsbF9jb3VudHlfdGFibGUkUGVyY2VudF9Qb3ZlcnR5KQoKYmFjaF9ib3hwbG90KGZ1bGxfY291bnR5X3RhYmxlJFJ1cmFsX3VyYmFuX2NvZGUpCgpgYGAKCmBgYHtyIGZ1bmN0aW9uc30KZGVuc2l0eVBsb3QgPSBmdW5jdGlvbih4LCBwbG90X25hbWUsIHhfbmFtZSl7CiAgeCA8LSBuYS5vbWl0KHgpCiAgaGlzdCh4X3ZhciwgY29sID0gInJlZCIsIGJvcmRlciA9ICJibGFjayIsIHByb2IgPSBUUlVFLCBtYWluID0gcGxvdF9uYW1lLCB4bGFiID0geF9uYW1lKQogIGxpbmVzKGRlbnNpdHkoeF92YXIpLCBjb2wgPSAiYmx1ZSIsIGx3ZCA9IDIpCn0KCmJhY2hfcG9pbnQgPSBmdW5jdGlvbih4X3Zhcil7CiAgZ2dwbG90KGZ1bGxfY291bnR5X3RhYmxlLCBhZXMoeF92YXIsIFBlcmNlbnRfQmFjaGVsb3JzKSkrCiAgZ2VvbV9wb2ludCgpCn0KCmJhY2hfc21vb3RoID0gZnVuY3Rpb24oeF92YXIpewogIGdncGxvdChmdWxsX2NvdW50eV90YWJsZSwgYWVzKHhfdmFyLCBQZXJjZW50X0JhY2hlbG9ycykpKwogIGdlb21fc21vb3RoKCkKfQoKYmFjaF9ib3hwbG90ID0gZnVuY3Rpb24oeF92YXIpewogIGdncGxvdChmdWxsX2NvdW50eV90YWJsZSwgYWVzKHhfdmFyLCBQZXJjZW50X0JhY2hlbG9ycykpKwogIGdlb21fYm94cGxvdCgpCn0KCnBvaW50X2Z1bmMgPSBmdW5jdGlvbih4LHkseF9uYW1lLHlfbmFtZSl7CiAgZ2dwbG90KGZ1bGxfY291bnR5X3RhYmxlLCBhZXMoeF92YXIsIFBlcmNlbnRfQmFjaGVsb3JzKSkrCiAgZ2VvbV9wb2ludCgpKwogIGxhYih4X25hbWUseV9uYW1lKQp9Cgp1cmJfY29sIDwtIGZ1bmN0aW9uKHlfdmFyKXsKICBnZ3Bsb3QoZ3JvdXBlZF9ieV91cmJhbl9jbGFzcywgYWVzKFJ1cmFsX3VyYmFuX2NvZGUseV92YXIsZmlsbCA9IFJ1cmFsX3VyYmFuX2NvZGUpKSsKICBnZW9tX2NvbCgpKwogIHRoZW1lKGxlZ2VuZC5wb3NpdGlvbiA9ICJub25lIikKfQpgYGAKCmBgYHtyIGdyb3VwX2J5X3VyYl9ncmFwaHN9CmdncGxvdChncm91cF9ieV91cmJfdGFibGUsIGFlcyhSdXJhbF91cmJhbl9jb2RlLFBlcmNlbnRfTm9fRGlwbG9tYSxmaWxsID0gUnVyYWxfdXJiYW5fY29kZSkpKwogIGdlb21fY29sKCkrCiAgdGhlbWUobGVnZW5kLnBvc2l0aW9uID0gIm5vbmUiKQoKZ2dwbG90KGdyb3VwX2J5X3VyYl90YWJsZSwgYWVzKFJ1cmFsX3VyYmFuX2NvZGUsUGVyY2VudF9EaXBsb21hLGZpbGwgPSBSdXJhbF91cmJhbl9jb2RlKSkrCiAgZ2VvbV9jb2woKSsKICB0aGVtZShsZWdlbmQucG9zaXRpb24gPSAibm9uZSIpCgpnZ3Bsb3QoZ3JvdXBfYnlfdXJiX3RhYmxlLCBhZXMoUnVyYWxfdXJiYW5fY29kZSxQZXJjZW50X0Fzc29jaWF0ZXMsZmlsbCA9IFJ1cmFsX3VyYmFuX2NvZGUpKSsKICBnZW9tX2NvbCgpKwogIHRoZW1lKGxlZ2VuZC5wb3NpdGlvbiA9ICJub25lIikKCmdncGxvdChncm91cF9ieV91cmJfdGFibGUsIGFlcyhSdXJhbF91cmJhbl9jb2RlLFBlcmNlbnRfQmFjaGVsb3JzLGZpbGwgPSBSdXJhbF91cmJhbl9jb2RlKSkrCiAgZ2VvbV9jb2woKSsKICB0aGVtZShsZWdlbmQucG9zaXRpb24gPSAibm9uZSIpCgptdWx0aV9ib3hwbG90IDwtZnVuY3Rpb24oeCx5LHhfbmFtZSx5X25hbWUpeyAKIGdncGxvdChncm91cF9ieV91cmJfdGFibGUsIGFlcyh4LCB5LGdyb3VwID0gUnVyYWxfdXJiYW5fY29kZSkpKwogIGdlb21fYm94cGxvdChmaWxsPSJzdGVlbGJsdWUiKSsKICAgIGxhYnMoeT15X25hbWUseD14X25hbWUpCn0KYGBgCgpgYGB7cn0KQUxfdGFibGUgPC0gZnVsbGVyX3RibCAlPiUKICBmaWx0ZXIoU3RhdGU9PXN0YXRlLmFiYlsxXSkKCnZlY3Rvck9mVGFibGVzIDwtbGlzdChsZW5ndGggPSA1MCkKZm9yIChpIGluIDE6NTApewogICN3cml0ZS50YWJsZSh2ZWN0b3JPZlRhYmxlcyxhcHBlbmQgPSAiVFJVRSIpCiAgdmVjdG9yT2ZUYWJsZXMuYXBwZW5kKGZ1bGxlcl90YmwgJT4lIGZpbHRlcihTdGF0ZT09c3RhdGUuYWJiW2ldKSkKfQpgYGAKCmBgYHtyIGJveHBsb3RzfQp0Ymw8LWdyb3VwX2J5X3VyYl90YWJsZQoKbXVsdGlfYm94cGxvdCh0YmwkUnVyYWxfdXJiYW5fY29kZSx0YmwkUGVyY2VudF9Ob19EaXBsb21hLCJSdXJhbF91cmJhbl9jb2RlIiwiUGVyY2VudF9Ob19EaXBsb21hIikKCgpgYGAKCgooUGFydCBvZikgT2xkIFN1bW1hcnk6CiAgb3JnYW5pemVkIHRoZSBkYXRhZnJhbWUgYWNjb3JkaW5nIHRvIG91ciBwcmVmZXJlbmNlIHRvIGVzdGFibGlzaCBhbiByZWxhdGlvbnNoaXAuCiAgICAgICAgICBXZSBoYXZlIGdyb3VwZWQgdGhlIGZpbmRpbmdzIGFzIHBlciBzdGF0ZSBhbmQgY291bnRpZXMgaW4gdGhlIFVuaXRlZCBTdGF0ZXMgb2YgQW1lcmljYSBhbmQgdmlzdWFsaXplZCBpdCB0aHJvdWdoIHRoZSB1c2Ugb2YgcGxvdF91c21hcCBmdW5jdGlvbi4KICAgICAgICAgIFRoaXMgcGxvdCBzaG93cyB0aGUgZGlzdHJpYnV0aW9uIHBlcmNlbnRhZ2Ugb2Ygc3R1ZGVudCBlbnJvbGxtZW50IHRvIGRpZmZlcmVudCBwcm9ncmFtcyBpbiBhIGNvdW50eSBvciBzdGF0ZS4KICAgICAgICAgIEZ1cnRoZXJtb3JlIHdlIGhhdmUgY3JlYXRlZCBjb3JyZWxhdGlvbiBwbG90IHRvIGlkZW50aWZ5IHRoZSBjb25uZWN0aW9uIGJldHdlZW4gaW5jb21lIGFuZCBwcm9ncmFtcyBlbnJvbGxlZCwgaXQgaXMgYWxzbyBtYWRlIGR5bmFtaWMgdG8gbWFrZSBpdCBlYXNpZXIgdG8gdW5kZXJzdGFuZCB0aGUgbGluayBiZXR3ZWVuIHR3byB2YXJpYWJsZXMuCiAgICAgICAgICBJbiBhZGRpdGlvbiB0byBpdCwgd2UgaGF2ZSBwZXJmb3JtZWQgbGluZWFyIG1vZGVsIHRvIGdldCBhIGRlZXBlciBrbm93bGVkZ2Ugb24gdGhlIHJlbGF0aW9uLgogICAgICAgICAgV2UgaGF2ZSBwdXQgdG9nZXRoZXIgYWxsIG91ciBmaW5kaW5ncyBpbiBvbmUgcGxhY2Ugd2l0aCB0aGUgaGVscCBvZiAnU2hpbnknLgogICAgICAgICAgV2UgaGF2ZSB1c2VkIHNoaW55IGRhc2hib2FyZCB0byBzdW1tYXJpemUgb3VyIHRob3VnaHRzIGFuZCBwcm9jZXNzLiIp</div>
 
 
 

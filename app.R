@@ -187,7 +187,7 @@ tabItem(tabName = "about",
              align = "left"),
           textOutput("atext"),
           tags$br(),
-          h3("Tyler Torren",
+          h3("Tyler Toren",
              align = "left"),
           textOutput("btext"),
           tags$br(),
@@ -322,22 +322,24 @@ server <- function(input, output) {
     
   })
   output$text <- renderText({
-    paste("Our project is all about investigating the effects of different
+    paste("Our project is about investigating the effects of different
           social and economic factors on graduation and enrollment rates across
           the country. This will allow us to better understand why there is such
-          a large gap in educational attainment throughout the US. To do this,
+          a large gap in educational attainment. To do this,
           we imported multiple relevant datasets, cleaned them up in RStudio and
-          used a combination of visualizations and models to gain deeper insights.
-          We also created several maps with the plot_usmap function and created
+          used a combination of visualizations and models to discover new insights.
+          We then created several maps with the plot_usmap function and made
           a Shiny App where we displayed all of our findings. Our thoughts and 
-          processes have been summarized in a Shiny Dashboard.")
+          processes have been summarized in the Shiny Dashboard.")
   })
   output$atext <- renderText({
     paste("A fun loving super active personality who prefers outdoor than indoor.
           Loves all kind of sporting activity and enjoys self time.")
   })
   output$btext <- renderText({
-    paste("Ehh... he's alright, I guess.")
+    paste("A data science student who is also looking to someday become a 
+    successful business owner. His hobbies include gaming, going out with friends
+    and playing the guitar.")
   })
   
 }
