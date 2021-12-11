@@ -39,10 +39,6 @@ sidebar <- dashboardSidebar(
             menuItem("Multi Line",
                      tabName = 'multiline')
     ),
-    menuItem("Model",
-             tabName = "model",
-             icon = icon("clipboard")
-    ),
     menuItem("About", tabName = "about", icon = icon("address-card"))
   )
 )
@@ -126,7 +122,7 @@ body <- dashboardBody(
         align = "center"),
       box(plotOutput("mline"),
           width = 15),
-      h6("Note: 0 - most rural  9 - most urban"),
+      h6("Note: 1 - most urban  9 - most rural"),
       materialSwitch(inputId = "id", label = "Smooth?", status = "success")
       ),
     tabItem(
@@ -172,12 +168,6 @@ body <- dashboardBody(
             h6(em(tags$a(href = "https://www.ers.usda.gov/data-products/county-level-data-sets/","www.ers.usda.gov")),
                align = "left")
           )),
-tabItem(tabName = "model",
-        fluidPage(
-          h1(strong("Linear Model"),
-             align = "center"),
-          uiOutput("modelmarkdown")
-        )),
 tabItem(tabName = "about",
         fluidPage(
           h1(strong("About the authors"),
@@ -208,9 +198,6 @@ ui <- dashboardPage(
 server <- function(input, output) {
   output$Incometable <- renderDataTable(income_tab)
   output$Edutable <- renderDataTable(edu_table)
-  output$modelmarkdown <- renderUI({
-    HTML(markdown::markdownToHTML(knit("Model.Rmd", quiet = TRUE)))
-  })  
   output$CorrMap <- renderPlot({
       plot(inc_edu_county[3:7])
   })
@@ -228,7 +215,7 @@ server <- function(input, output) {
       labs (x = "Rural Urban Code")
   })
   output$relation <- renderPlot({
-    if (input$education == "No High_School")
+    if (input$education == "No High School")
       yvalue <- "Less_than_High_School"
     else if (input$education == "High School")
       yvalue <- "High_School_Only"
@@ -249,13 +236,13 @@ server <- function(input, output) {
   
   output$sstate <- renderPlot({
     
-    if (input$columns == "No High_School")
+    if (input$columns == "No High School")
       xcolumn <- "Less_than_High_School"
     else if (input$columns == "High School")
       xcolumn <- "High_School_Only"
     else if (input$columns == "Associate")
       xcolumn <- "College_or_Associate"
-    else
+    else  if (input$columns == "Bachelors")
       xcolumn <- "Bachelors"
     
     if (input$geography == "State")
@@ -294,7 +281,7 @@ server <- function(input, output) {
       xfactor <- "Median_Household_Income_2019"
     else if (input$xfact == "Decade Growth Rate")
       xfactor <- "avg_decade_growth_rate"
-    else
+    else if (input$xfact == "Poverty")
       xfactor <- "Percent_Poverty"
     
     if (input$yfact == "No High School")
@@ -303,7 +290,7 @@ server <- function(input, output) {
       yfactor <- "Percent_Diploma"
     else if (input$yfact == "Associate")
       yfactor <- "Percent_Associates"
-    else (input$yfact == "Bachelors")
+    else if (input$yfact == "Bachelors")
       yfactor <- "Percent_Bachelors"
       
     if (input$geo == "State")
