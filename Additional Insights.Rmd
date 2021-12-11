@@ -24,8 +24,6 @@ summary(growth_model)
 
 poverty_model <- lm(Percent_Bachelors~Percent_Poverty,data=full_county_table)
 summary(poverty_model)
-
-
 ```
 
 The greatest single indicator of county-level education that we examined is median income. According to the linear model I created, median income accounts for 50.76% of the variation among counties in percentage of people receiving a bachelors degree. 
@@ -94,7 +92,7 @@ bach_boxplot(full_county_table$Rural_urban_code)
 ```
 
 ```{r functions}
-densityPlot = function(x_var, plot_name, x_name){
+densityPlot = function(x, plot_name, x_name){
   x <- na.omit(x)
   hist(x_var, col = "red", border = "black", prob = TRUE, main = plot_name, xlab = x_name)
   lines(density(x_var), col = "blue", lwd = 2)
@@ -113,6 +111,12 @@ bach_smooth = function(x_var){
 bach_boxplot = function(x_var){
   ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
   geom_boxplot()
+}
+
+point_func = function(x,y,x_name,y_name){
+  ggplot(full_county_table, aes(x_var, Percent_Bachelors))+
+  geom_point()+
+  lab(x_name,y_name)
 }
 
 urb_col <- function(y_var){
@@ -138,8 +142,35 @@ ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Associates,fill = Rural_
 ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
   geom_col()+
   theme(legend.position = "none")
+
+multi_boxplot <-function(x,y,x_name,y_name){ 
+ ggplot(group_by_urb_table, aes(x, y,group = Rural_urban_code))+
+  geom_boxplot(fill="steelblue")+
+    labs(y=y_name,x=x_name)
+}
 ```
 
+```{r}
+AL_table <- fuller_tbl %>%
+  filter(State==state.abb[1])
+
+vectorOfTables <-list(length = 50)
+for (i in 1:50){
+  #write.table(vectorOfTables,append = "TRUE")
+  vectorOfTables.append(fuller_tbl %>% filter(State==state.abb[i]))
+}
+```
+
+```{r boxplots}
+tbl<-group_by_urb_table
+
+multi_boxplot(tbl$Rural_urban_code,tbl$Percent_No_Diploma,"Rural_urban_code","Percent_No_Diploma")
+
+
+```
+
+
+(Part of) Old Summary:
   organized the dataframe according to our preference to establish an relationship.
           We have grouped the findings as per state and counties in the United States of America and visualized it through the use of plot_usmap function.
           This plot shows the distribution percentage of student enrollment to different programs in a county or state.
