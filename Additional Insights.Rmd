@@ -24,8 +24,6 @@ summary(growth_model)
 
 poverty_model <- lm(Percent_Bachelors~Percent_Poverty,data=full_county_table)
 summary(poverty_model)
-
-
 ```
 
 The greatest single indicator of county-level education that we examined is median income. According to the linear model I created, median income accounts for 50.76% of the variation among counties in percentage of people receiving a bachelors degree. 
@@ -144,7 +142,33 @@ ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Associates,fill = Rural_
 ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
   geom_col()+
   theme(legend.position = "none")
+
+multi_boxplot <-function(x,y,x_name,y_name){ 
+ ggplot(group_by_urb_table, aes(x, y,group = Rural_urban_code))+
+  geom_boxplot(fill="steelblue")+
+    labs(y=y_name,x=x_name)
+}
 ```
+
+```{r}
+AL_table <- fuller_tbl %>%
+  filter(State==state.abb[1])
+
+vectorOfTables <-list(length = 50)
+for (i in 1:50){
+  #write.table(vectorOfTables,append = "TRUE")
+  vectorOfTables.append(fuller_tbl %>% filter(State==state.abb[i]))
+}
+```
+
+```{r boxplots}
+tbl<-group_by_urb_table
+
+multi_boxplot(tbl$Rural_urban_code,tbl$Percent_No_Diploma,"Rural_urban_code","Percent_No_Diploma")
+
+
+```
+
 
 (Part of) Old Summary:
   organized the dataframe according to our preference to establish an relationship.

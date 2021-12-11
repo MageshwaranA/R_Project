@@ -35,7 +35,6 @@ income_table <- Unemployment_dataset %>%
 income_tab <- income_table %>% 
   rename("Median Income" = Median_Household_Income_2019)
 
-
 edu_table <- Education_dataset %>%
   select(c(1),c(3),c(44:47))%>%
   rename("FIPS_Code" = c(1), "Area_name" = c(2), "Percent_No_Diploma" = c(3), "Percent_Diploma" = c(4), "Percent_Associates" = c(5),"Percent_Bachelors" = c(6))
@@ -78,6 +77,12 @@ full_state_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"
   filter(endsWith(FIPS_Code,"000"))%>%
   select(-c(8))
 ```
+
+```{r fuller_tbl}
+fuller_tbl <- full_county_table %>% 
+  extract(Area_name.x, c("County", "State"), "([^,]+), ([^)]+)")
+```
+
 <<<<<<< HEAD
 
 ```{r functions}
@@ -88,7 +93,7 @@ multi_smooth <- function(x,y,x_name,y_name){
 }
 
 multi_point <- function(x,y,x_name,y_name){
- ggplot(full_county_table, aes(x, y, colour = Rural_urban_code))+
+ ggplot(full_county_table, aes(x, y))+
   geom_point()+
     labs(y=y_name,x=x_name)
 }
@@ -155,7 +160,6 @@ multi_point(tbl$avg_decade_growth_rate, tbl$Percent_Diploma,"Avg_Decade_Growth_R
 multi_point(tbl$Percent_Poverty, tbl$Percent_Diploma,"Percent_Poverty","Percent_Associates")
 ```
 
-
 ```{r geom_smooth_groups_urb}
 
 tbl <- full_county_table
@@ -191,7 +195,12 @@ multi_smooth(tbl$avg_decade_growth_rate, tbl$Percent_Diploma,"Avg_Decade_Growth_
 multi_smooth(tbl$Percent_Poverty, tbl$Percent_Diploma,"Percent_Poverty","Percent_Associates")
 ```
 
-Income and Bachelors:
+
+Income and Bachelors
+
+We found that more urban areas had a greater correlation between income and the
+percentage of people receiving a bachelors degree. In more rural areas, the percentage of people with a bachelors degree eventually levels out as income increases. Surprisingly, education levels in counties with a 9 on the rural-urban continuum code actually start to decline when income reaches around $70,000. Counties with a 10 on the scale have an almost perfectly linear relationship between income and education.
+
 =======
 ```{r}
 
@@ -199,14 +208,6 @@ final_group <- group_by_urb_table %>%
   gather(Qualification, Percentage, Percent_Bachelors:Percent_Associates)
 
 ```
-
-#Income:
-
->>>>>>> 2f8919f7b0339b9b6d2753a5f77562a4d052045f
-We found that more urban areas had a greater correlation between income and the
-percentage of people receiving a bachelors degree. In more rural areas, the percentage of people with a bachelors degree eventually levels out as income increases. Surprisingly, education levels in counties with a 9 on the rural-urban continuum code actually start to decline when income reaches around $70,000. Counties with a 10 on the scale have an almost perfectly linear relationship between income and education.
-
-
 
 #Graphs
 
