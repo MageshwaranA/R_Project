@@ -266,7 +266,7 @@ server <- function(input, output) {
                             high = "green",
                             name = "Percentage%",
                             label = scales::comma,
-                            limits = c(0,100)) +
+                            limits = c(0,65)) +
         ggtitle(input$columns) +
         theme(plot.title = element_text(size = 15,
                                         hjust = 0.5)) +

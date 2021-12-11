@@ -93,11 +93,17 @@ multi_smooth <- function(x,y,x_name,y_name){
 }
 
 multi_point <- function(x,y,x_name,y_name){
- ggplot(full_county_table, aes(x, y))+
+ ggplot(full_county_table, aes(x, y, colour = Rural_urban_code))+
   geom_point()+
     labs(y=y_name,x=x_name)
 }
 ```
+
+```{r}
+
+```
+
+
 County Table Grouped By Urban Classification
 =======
 
@@ -126,6 +132,25 @@ group_by(Rural_urban_code)%>%
 ```{r full_group_by_urb}
 group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_urban_code"),
   list(bach_urban_class, no_diploma_urban_class, diploma_urban_class, assoc_urban_class))
+```
+
+```{r col_graph_urb}
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_No_Diploma,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Diploma,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Associates,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
+ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_urban_code))+
+  geom_col()+
+  theme(legend.position = "none")
+
 ```
 
 <<<<<<< HEAD
