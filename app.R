@@ -27,14 +27,14 @@ sidebar <- dashboardSidebar(
              tabName = "plots",
              icon = icon("chart-bar"),
              startExpanded = FALSE,
-             menuItem("Correlation",
-                      tabName = "Corrmap"
-                      ),
              menuItem("Density",
                          tabName = "density"
              ),
-            menuItem("Line",
+             menuItem("Line",
                       tabName = "line"
+             ),
+            menuItem("Scatter",
+                      tabName = "scatter"
                       ),
             menuItem("Multi Line",
                      tabName = 'multiline')
@@ -60,14 +60,6 @@ body <- dashboardBody(
               dataTableOutput("Edutable")
             )
     ),
-    tabItem(tabName = "Corrmap",
-            fluidPage(
-              h1(strong("Correlation"),
-                 align = "center"),
-              box(plotOutput("CorrMap"),
-                  width = 15)
-            )
-    ),
     tabItem(tabName = "density",
             fluidPage(
               h1(strong("Income vs Enrollment"),
@@ -82,6 +74,32 @@ body <- dashboardBody(
                             width = 500,
                 )
               ),
+            )
+    ),
+    tabItem(tabName = "scatter",
+            fluidPage(
+              h1(strong("Scatter Plot"),
+                 align = "center"),
+              box(plotOutput("scat"), width = 15),
+              box(
+                selectInput("in1","Input 1:",
+                            c("Income",
+                              "Growth Rate",
+                              "Poverty"
+                              ),
+                            width = 500,
+                )
+              ),
+              box(
+                selectInput("in2","Input 2:",
+                            c("No High School",
+                              "High School",
+                              "Associate",
+                              "Bachelors"),
+                            width = 500,
+                )
+              ),
+              
             )
     ),
     tabItem(tabName = "line",
@@ -198,9 +216,6 @@ ui <- dashboardPage(
 server <- function(input, output) {
   output$Incometable <- renderDataTable(income_tab)
   output$Edutable <- renderDataTable(edu_table)
-  output$CorrMap <- renderPlot({
-      plot(inc_edu_county[3:7])
-  })
   
   output$mline <- renderPlot({
     if (input$id == FALSE)
@@ -305,6 +320,35 @@ server <- function(input, output) {
               labs(x = input$xfact, y = input$yfact) +
       geom_smooth() +
       geom_line()
+    
+    
+  })
+  output$scat <- renderPlot({
+    
+    if (input$in1 == "Income")
+      xfactr <- "Median_Household_Income_2019"
+    else if (input$in1 == "Growth Rate")
+      xfactr <- "avg_decade_growth_rate"
+    else if (input$in1 == "Poverty")
+      xfactr <- "Percent_Poverty"
+    
+    if (input$in2 == "No High School")
+      yfactr <- "Percent_No_Diploma"
+    else if (input$in2 == "High School")
+      yfactr <- "Percent_Diploma"
+    else if (input$in2 == "Associate")
+      yfactr <- "Percent_Associates"
+    else if (input$in2 == "Bachelors")
+      yfactr <- "Percent_Bachelors"
+    
+    ggplot(full_county_table, aes(
+      full_county_table[[xfactr]],
+      full_county_table[[yfactr]],
+      colour = Rural_urban_code))+
+      geom_point()+
+      labs(x=input$in1, y=input$in2)
+    
+
     
     
   })
