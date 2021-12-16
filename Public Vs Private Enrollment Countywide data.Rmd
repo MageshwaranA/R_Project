@@ -13,13 +13,10 @@ library(viridis)
 library(gifski)
 ```
 
-<<<<<<< HEAD
 
-=======
 #Importing dataset
->>>>>>> 2f8919f7b0339b9b6d2753a5f77562a4d052045f
 
-```{r importing_xl}
+```{r importing_xl Tyler}
 Unemployment_dataset <- read_excel("dataset/Unemployment.xlsx", range = "A5:CN3201")
 Education_dataset <- read_excel("dataset/Education.xlsx", range = "A5:AU3209")
 Population_dataset <- read_excel("dataset/PopulationEstimates.xlsx", range = "A2:H3203")
@@ -28,7 +25,7 @@ Poverty_dataset <- read_excel("dataset/PovertyEstimates.xls", range = "A5:AB3198
 
 #Tidying the tables
 
-```{r tidy_tables}
+```{r tidy_tables Tyler}
 income_table <- Unemployment_dataset %>%
   select("FIPS_Code","Area_name","Median_Household_Income_2019")
 
@@ -52,7 +49,7 @@ pov_table <- Poverty_dataset%>%
 
 #Merged Tables
 
-```{r merged_tables}
+```{r merged_tables Tyler}
 inc_edu_state <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
   select(-c(4))%>%
   filter(endsWith(FIPS_Code,"000"))
@@ -64,7 +61,7 @@ inc_edu_county <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
 
 #Full Tables:
 
-```{r join_county_tables}
+```{r join_county_tables Tyler}
 full_county_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"),
   list(income_table, edu_table, popn_table, pov_table))%>%
   select(-c(4),-c(9),-c(14))%>%
@@ -78,14 +75,12 @@ full_state_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"
   select(-c(8))
 ```
 
-```{r fuller_tbl}
+```{r fuller_tbl Tyler}
 fuller_tbl <- full_county_table %>% 
   extract(Area_name.x, c("County", "State"), "([^,]+), ([^)]+)")
 ```
 
-<<<<<<< HEAD
-
-```{r functions}
+```{r functions Tyler}
 multi_smooth <- function(x,y,x_name,y_name){
  ggplot(full_county_table, aes(x, y, colour = Rural_urban_code, group = Rural_urban_code))+
   geom_smooth(se = FALSE)+
@@ -99,18 +94,10 @@ multi_point <- function(x,y,x_name,y_name){
 }
 ```
 
-```{r}
-
-```
-
-
-County Table Grouped By Urban Classification
-=======
 
 #County Table Grouped By Urban Classification
->>>>>>> 2f8919f7b0339b9b6d2753a5f77562a4d052045f
 
-```{r group_by_urb}
+```{r group_by_urb Tyler}
 bach_urban_class <- full_county_table %>%
 group_by(Rural_urban_code)%>%
   summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))
@@ -129,12 +116,12 @@ group_by(Rural_urban_code)%>%
 
 ```
 
-```{r full_group_by_urb}
+```{r full_group_by_urb Tyler}
 group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_urban_code"),
   list(bach_urban_class, no_diploma_urban_class, diploma_urban_class, assoc_urban_class))
 ```
 
-```{r col_graph_urb}
+```{r col_graph_urb Tyler}
 ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_No_Diploma,fill = Rural_urban_code))+
   geom_col()+
   theme(legend.position = "none")
@@ -153,8 +140,7 @@ ggplot(group_by_urb_table, aes(Rural_urban_code,Percent_Bachelors,fill = Rural_u
 
 ```
 
-<<<<<<< HEAD
-```{r geom_line_groups_urb}
+```{r geom_line_groups_urb Tyler}
 tbl <- full_county_table
 
 multi_point(tbl$Median_Household_Income_2019, tbl$Percent_Bachelors,"Median_Household_Income_2019","Percent_Bachelors")
@@ -185,7 +171,7 @@ multi_point(tbl$avg_decade_growth_rate, tbl$Percent_Diploma,"Avg_Decade_Growth_R
 multi_point(tbl$Percent_Poverty, tbl$Percent_Diploma,"Percent_Poverty","Percent_Associates")
 ```
 
-```{r geom_smooth_groups_urb}
+```{r geom_smooth_groups_urb Tyler}
 
 tbl <- full_county_table
 
@@ -226,48 +212,6 @@ Income and Bachelors
 We found that more urban areas had a greater correlation between income and the
 percentage of people receiving a bachelors degree. In more rural areas, the percentage of people with a bachelors degree eventually levels out as income increases. Surprisingly, education levels in counties with a 9 on the rural-urban continuum code actually start to decline when income reaches around $70,000. Counties with a 10 on the scale have an almost perfectly linear relationship between income and education.
 
-=======
-```{r}
 
-final_group <- group_by_urb_table %>% 
-  gather(Qualification, Percentage, Percent_Bachelors:Percent_Associates)
-
-```
-
-#Graphs
-
-```{r Statewise Cleaning}
-library (usmap)
-St_Pop <- inc_edu_state[order(inc_edu_state$Area_name),]
-St_Pop <- St_Pop[!(St_Pop$Area_name == "United States"),]
-St_Pop$fips <- statepop$fips 
-St_Pop$abbr <- statepop$abbr
-
-St_Pop <- St_Pop %>% 
-  rename(Income = Median_Household_Income_2019) %>% 
-  rename(Less_than_High_School = `Percent_No_Diploma`) %>% 
-  rename ( High_School_Only = `Percent_Diploma`) %>% 
-  rename(College_or_Associate = `Percent_Associates`) %>% 
-  rename(Bachelors = `Percent_Bachelors`)
-
-```
-
-```{r Countywise Cleaning}
-#anti_join(countypop, Ct_Pop, by = "fips")
-Ct_Pop <- inc_edu_county[order(inc_edu_county$Area_name),]
-Ct_Pop <- Ct_Pop[order(Ct_Pop$FIPS_Code),]
-Ct_Pop <- na.omit(Ct_Pop)
-temp1 <- countypop
-temp2 <- temp1[!(temp1$fips == "15005"),]
-Ct_Pop$fips <- temp2$fips
-Ct_Pop$abbr <- temp2$abbr
-Ct_Pop <- Ct_Pop %>% 
-  rename(Income = Median_Household_Income_2019) %>% 
-  rename(Less_than_High_School = `Percent_No_Diploma`) %>% 
-  rename ( High_School_Only = `Percent_Diploma`) %>% 
-  rename(College_or_Associate = `Percent_Associates`) %>% 
-  rename(Bachelors = `Percent_Bachelors`)
-
-```
 
 

@@ -1,0 +1,147 @@
+#This module is not executable
+
+#Visualization used to summarize findings through Shiny application
+
+#Code chunks from shiny application are put on view for readability
+
+#This output$mline is used to plot multiline plot in our shiny application and input$id holds the value from the "smooth" slider button
+
+ output$mline <- renderPlot({
+    if (input$id == FALSE)
+      ggplot(final_group) +
+        geom_line(aes(x = Rural_urban_code,
+                      y = Percentage,
+                      color = Qualification)) +
+        labs( x = "Rural Urban Code") 
+    else
+      ggplot(final_group, aes(Rural_urban_code, Percentage, colour=Qualification, group = Qualification))+
+      geom_smooth(se = FALSE) +
+      labs (x = "Rural Urban Code")
+  })
+  
+#The output$relation provides the density plot for our application which obtains the y factor from the input$education.
+
+  output$relation <- renderPlot({
+    if (input$education == "No High School")
+      yvalue <- "Less_than_High_School"
+    else if (input$education == "High School")
+      yvalue <- "High_School_Only"
+    else if (input$education == "Associate")
+      yvalue <- "College_or_Associate"
+    else
+      yvalue <- "Bachelors"
+    ggplot(Ct_Pop,
+          aes(x = Ct_Pop$Income, y = Ct_Pop[[yvalue]])) +
+      labs(x = "Income",
+           y = input$education) +
+      geom_hex(bins = 70) +
+      scale_fill_continuous(type = "viridis") +
+      theme_bw()
+       })
+  
+#The output$sstate provides the US map with state level percentage distribution of No high school, high school, college or associate, and bachelors. When the county is selected from the drop down, it provides the US map with state level percentage distribution of No high school, high school, college or associate, and bachelors.
+
+#We have used alot of logical conditions("if and else if") inorder to work the map according to our requirements
+
+  output$sstate <- renderPlot({
+    if (input$columns == "No High School")
+      xcolumn <- "Less_than_High_School"
+    else if (input$columns == "High School")
+      xcolumn <- "High_School_Only"
+    else if (input$columns == "Associate")
+      xcolumn <- "College_or_Associate"
+    else  if (input$columns == "Bachelors")
+      xcolumn <- "Bachelors"
+    if (input$geography == "State")
+      plot_usmap(data = St_Pop,
+                values = xcolumn,
+                labels = TRUE) +
+        scale_fill_gradient(low = "red",
+                            high = "green",
+                            name = "Percentage%",
+                            label = scales::comma,
+                            limits = c(0,65)) +
+        ggtitle(input$columns) +
+        theme(plot.title = element_text(size = 15,
+                                        hjust = 0.5)) +
+        theme(legend.position = "right",
+              legend.text = element_text(size = 06))
+    else
+      plot_usmap(data = Ct_Pop,
+                 values = xcolumn,
+                 labels = TRUE) +
+      scale_fill_gradient(low = "red",
+                          high = "green",
+                          name = "Percentage%",
+                          label = scales::comma,
+                          limits = c(0,100)) +
+      ggtitle(input$column) +
+      theme(plot.title = element_text(size = 15,
+                                      hjust = 0.5)) +
+      theme(legend.position = "right",
+            legend.text = element_text(size = 06))
+      
+  })
+  
+#The output$trend provides us the line graph showing us the trend observed from the data collected to understand how the diverse the distribution is  
+
+#State and county level seperation is used in this plot also
+
+#We have used alot of logical conditions("if and else if") inorder to work the map according to our requirements
+
+  
+  output$trend <- renderPlot({
+    if (input$xfact == "Income")
+      xfactor <- "Median_Household_Income_2019"
+    else if (input$xfact == "Decade Growth Rate")
+      xfactor <- "avg_decade_growth_rate"
+    else if (input$xfact == "Poverty")
+      xfactor <- "Percent_Poverty"
+    if (input$yfact == "No High School")
+      yfactor <- "Percent_No_Diploma"
+    else if (input$yfact == "High School")
+      yfactor <- "Percent_Diploma"
+    else if (input$yfact == "Associate")
+      yfactor <- "Percent_Associates"
+    else if (input$yfact == "Bachelors")
+      yfactor <- "Percent_Bachelors"
+    if (input$geo == "State")
+      ggplot(full_state_table,
+             aes(full_state_table[[xfactor]],full_state_table[[yfactor]])) +
+             labs(x = input$xfact, y = input$yfact) +
+        geom_smooth() +
+        geom_line()
+    else
+      ggplot(full_county_table,
+             aes(full_county_table[[xfactor]],full_county_table[[yfactor]])) +
+              labs(x = input$xfact, y = input$yfact) +
+      geom_smooth() +
+      geom_line()
+    
+  })
+  
+#The output$scat provides us with a scatter plot  
+#input$in1 & input$in2 are inputs provided from the dropdowns
+  
+  output$scat <- renderPlot({
+    if (input$in1 == "Income")
+      xfactr <- "Median_Household_Income_2019"
+    else if (input$in1 == "Growth Rate")
+      xfactr <- "avg_decade_growth_rate"
+    else if (input$in1 == "Poverty")
+      xfactr <- "Percent_Poverty"
+    if (input$in2 == "No High School")
+      yfactr <- "Percent_No_Diploma"
+    else if (input$in2 == "High School")
+      yfactr <- "Percent_Diploma"
+    else if (input$in2 == "Associate")
+      yfactr <- "Percent_Associates"
+    else if (input$in2 == "Bachelors")
+      yfactr <- "Percent_Bachelors"
+    ggplot(full_county_table, aes(
+      full_county_table[[xfactr]],
+      full_county_table[[yfactr]],
+      colour = Rural_urban_code))+
+      geom_point()+
+      labs(x=input$in1, y=input$in2)
+  })
