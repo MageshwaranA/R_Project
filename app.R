@@ -10,6 +10,7 @@ library(ggridges)
 library(gganimate)
 library(viridis)
 library(gifski)
+library(hexbin)
 library (usmap)
 library(shiny)
 library(shinydashboard)
@@ -199,10 +200,11 @@ body <- dashboardBody(
             fluidPage(
               h1(strong("Income vs Enrollment"),
                  align = "center"),
-              box(status = "primary",
+              fluidRow(box(title = "Density",
+                status = "primary",
                   solidHeader = TRUE,
                   collapsible = TRUE,
-                fluidRow(plotOutput("relation"), width = 15)
+                plotOutput("relation")
                 ),
               box(status = "primary",
                   solidHeader = TRUE,
@@ -213,19 +215,19 @@ body <- dashboardBody(
                               "Bachelors"),
                             width = 500,
                 )
-              ),
+              )),
             )
     ),
     tabItem(tabName = "scatter",
             fluidPage(
               h1(strong("Scatter Plot"),
                  align = "center"),
-              box(status = "primary",
+              fluidRow(
+                box(title = "Scatter",
+                  status = "primary",
                   solidHeader = TRUE,
                   collapsible = TRUE,
-                fluidRow(
-                  plotOutput("scat"), width = 15)
-                ),
+                  plotOutput("scat")),
               box(status = "primary",
                   solidHeader = TRUE,
                 selectInput("in1","Input 1:",
@@ -245,7 +247,7 @@ body <- dashboardBody(
                               "Bachelors"),
                             width = 500,
                 )
-              ),
+              )),
               
             )
     ),
@@ -253,12 +255,11 @@ body <- dashboardBody(
             fluidPage(
               h1(strong("Trends"),
                  align = "center"),
-              box(status = "primary",
+              fluidRow(box(title = "Line",
+                status = "primary",
                   solidHeader = TRUE,
                   collapsible = TRUE,
-                fluidRow(
-                  plotOutput("trend"), width = 15)
-                ),
+                  plotOutput("trend")),
               box(status = "primary",
                   solidHeader = TRUE,
                 selectInput("xfact","X Factor:",
@@ -285,7 +286,7 @@ body <- dashboardBody(
                               "County"),
                             width = 500,
                             )
-              )
+              ))
             )
     ),
     tabItem(
@@ -293,26 +294,26 @@ body <- dashboardBody(
       fluidPage(
         h2(strong("Qualification at Rural and Urban level")),
         align = "center"),
-      box(status = "primary",
+      fluidRow(box(title = "Multi Line",
+        status = "primary",
           solidHeader = TRUE,
           collapsible = TRUE,
-        fluidRow(plotOutput("mline"),
-          width = 15)),
+        plotOutput("mline")),
       h6("Note: 1 - most urban  9 - most rural"),
       box(status = "primary",
           solidHeader = TRUE,
         materialSwitch(inputId = "id", label = "Smooth?", status = "success")
-      )),
+      ))),
     tabItem(
       tabName = "map",
       fluidPage(
         h1(strong("Educational distribution"),
            align = "center"),
-        box(status = "primary",
+        fluidRow(box(title = "US Distribution Map",
+          status = "primary",
             solidHeader = TRUE,
             collapsible = TRUE,
-          fluidRow(plotOutput("sstate"),
-            width = 15)
+          plotOutput("sstate")
           ),
         box(status = "primary",
             solidHeader = TRUE,
@@ -331,7 +332,7 @@ body <- dashboardBody(
                         "County"),
                       width = 500,
                       )
-        )
+        ))
       )
     ),
   tabItem(tabName = "summary",
