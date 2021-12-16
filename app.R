@@ -1,3 +1,16 @@
+#Importing libraries
+
+library(tidyverse)
+library(readr)
+library(readxl)
+library(reactable)
+library(scales)
+library(hrbrthemes)
+library(ggridges)
+library(gganimate)
+library(viridis)
+library(gifski)
+library (usmap)
 library(shiny)
 library(shinydashboard)
 library(DT)
@@ -5,6 +18,128 @@ library(knitr)
 library(shinycssloaders)
 library(shinythemes)
 library (shinyWidgets)
+
+#Importing dataset
+
+Unemployment_dataset <- read_excel("dataset/Unemployment.xlsx", range = "A5:CN3201")
+Education_dataset <- read_excel("dataset/Education.xlsx", range = "A5:AU3209")
+Population_dataset <- read_excel("dataset/PopulationEstimates.xlsx", range = "A2:H3203")
+Poverty_dataset <- read_excel("dataset/PovertyEstimates.xls", range = "A5:AB3198")
+
+#Tidying the tables
+
+income_table <- Unemployment_dataset %>%
+  select("FIPS_Code","Area_name","Median_Household_Income_2019")
+
+income_tab <- income_table %>% 
+  rename("Median Income" = Median_Household_Income_2019)
+
+edu_table <- Education_dataset %>%
+  select(c(1),c(3),c(44:47))%>%
+  rename("FIPS_Code" = c(1), "Area_name" = c(2), "Percent_No_Diploma" = c(3), "Percent_Diploma" = c(4), "Percent_Associates" = c(5),"Percent_Bachelors" = c(6))
+
+popn_table <- Population_dataset%>%
+  select(-c(2),-c(6:7))%>%
+  rename("FIPS_Code" = c(1),"Area_name" = c(2),"Rural_urban_code" = c(3),"Start_popn" = c(4), "End_popn" = c(5))%>%
+  mutate(avg_decade_growth_rate = ((1+((End_popn-Start_popn)/Start_popn))^(1/3)-1))
+
+pov_table <- Poverty_dataset%>%
+  select(c(1),c(3),c(11))%>%
+  rename("FIPS_Code" = c(1),"Percent_Poverty" = c(3))
+
+#Merged Tables
+
+inc_edu_state <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
+  select(-c(4))%>%
+  filter(endsWith(FIPS_Code,"000"))
+
+inc_edu_county <- merge(x = income_table, y = edu_table, by = "FIPS_Code")%>%
+  select(-c(4))%>%
+  filter(!endsWith(FIPS_Code,"000"))
+
+#Full Tables:
+
+full_county_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"),
+                            list(income_table, edu_table, popn_table, pov_table))%>%
+  select(-c(4),-c(9),-c(14))%>%
+  filter(!endsWith(FIPS_Code,"000"))%>%
+  drop_na()
+
+full_state_table <- Reduce(function(...) merge(..., all = TRUE, by = "FIPS_Code"),
+                           list(income_table, edu_table, popn_table, pov_table))%>%
+  select(-c(4),-c(9),-c(14))%>%
+  filter(endsWith(FIPS_Code,"000"))%>%
+  select(-c(8))
+
+fuller_tbl <- full_county_table %>% 
+  extract(Area_name.x, c("County", "State"), "([^,]+), ([^)]+)")
+
+multi_smooth <- function(x,y,x_name,y_name){
+  ggplot(full_county_table, aes(x, y, colour = Rural_urban_code, group = Rural_urban_code))+
+    geom_smooth(se = FALSE)+
+    labs(y=y_name,x=x_name)
+}
+
+multi_point <- function(x,y,x_name,y_name){
+  ggplot(full_county_table, aes(x, y, colour = Rural_urban_code))+
+    geom_point()+
+    labs(y=y_name,x=x_name)
+}
+
+#County Table Grouped By Urban Classification
+
+bach_urban_class <- full_county_table %>%
+  group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Bachelors),funs(mean(Percent_Bachelors)))
+
+no_diploma_urban_class <- full_county_table %>%
+  group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_No_Diploma),funs(mean(Percent_No_Diploma)))
+
+diploma_urban_class <- full_county_table %>%
+  group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Diploma),funs(mean(Percent_Diploma)))
+
+assoc_urban_class <- full_county_table %>%
+  group_by(Rural_urban_code)%>%
+  summarise_at(vars(Percent_Associates),funs(mean(Percent_Associates)))
+
+group_by_urb_table <- Reduce(function(...) merge(..., all = TRUE, by = "Rural_urban_code"),
+                             list(bach_urban_class, no_diploma_urban_class, diploma_urban_class, assoc_urban_class))
+
+final_group <- group_by_urb_table %>% 
+  gather(Qualification, Percentage, Percent_Bachelors:Percent_Associates)
+
+#Statewise Cleaning
+
+St_Pop <- inc_edu_state[order(inc_edu_state$Area_name),]
+St_Pop <- St_Pop[!(St_Pop$Area_name == "United States"),]
+St_Pop$fips <- statepop$fips 
+St_Pop$abbr <- statepop$abbr
+
+St_Pop <- St_Pop %>% 
+  rename(Income = Median_Household_Income_2019) %>% 
+  rename(Less_than_High_School = `Percent_No_Diploma`) %>% 
+  rename ( High_School_Only = `Percent_Diploma`) %>% 
+  rename(College_or_Associate = `Percent_Associates`) %>% 
+  rename(Bachelors = `Percent_Bachelors`)
+
+#Countywise Cleaning
+
+Ct_Pop <- inc_edu_county[order(inc_edu_county$Area_name),]
+Ct_Pop <- Ct_Pop[order(Ct_Pop$FIPS_Code),]
+Ct_Pop <- na.omit(Ct_Pop)
+temp1 <- countypop
+temp2 <- temp1[!(temp1$fips == "15005"),]
+Ct_Pop$fips <- temp2$fips
+Ct_Pop$abbr <- temp2$abbr
+Ct_Pop <- Ct_Pop %>% 
+  rename(Income = Median_Household_Income_2019) %>% 
+  rename(Less_than_High_School = `Percent_No_Diploma`) %>% 
+  rename ( High_School_Only = `Percent_Diploma`) %>% 
+  rename(College_or_Associate = `Percent_Associates`) %>% 
+  rename(Bachelors = `Percent_Bachelors`)
+
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Summary",
@@ -64,8 +199,13 @@ body <- dashboardBody(
             fluidPage(
               h1(strong("Income vs Enrollment"),
                  align = "center"),
-              box(plotOutput("relation"), width = 15),
-              box(
+              box(status = "primary",
+                  solidHeader = TRUE,
+                  collapsible = TRUE,
+                fluidRow(plotOutput("relation"), width = 15)
+                ),
+              box(status = "primary",
+                  solidHeader = TRUE,
                 selectInput("education","Enrollment:",
                             c("No High School",
                               "High School",
@@ -80,8 +220,14 @@ body <- dashboardBody(
             fluidPage(
               h1(strong("Scatter Plot"),
                  align = "center"),
-              box(plotOutput("scat"), width = 15),
-              box(
+              box(status = "primary",
+                  solidHeader = TRUE,
+                  collapsible = TRUE,
+                fluidRow(
+                  plotOutput("scat"), width = 15)
+                ),
+              box(status = "primary",
+                  solidHeader = TRUE,
                 selectInput("in1","Input 1:",
                             c("Income",
                               "Growth Rate",
@@ -90,7 +236,8 @@ body <- dashboardBody(
                             width = 500,
                 )
               ),
-              box(
+              box(status = "primary",
+                  solidHeader = TRUE,
                 selectInput("in2","Input 2:",
                             c("No High School",
                               "High School",
@@ -106,8 +253,14 @@ body <- dashboardBody(
             fluidPage(
               h1(strong("Trends"),
                  align = "center"),
-              box(plotOutput("trend"), width = 15),
-              box(
+              box(status = "primary",
+                  solidHeader = TRUE,
+                  collapsible = TRUE,
+                fluidRow(
+                  plotOutput("trend"), width = 15)
+                ),
+              box(status = "primary",
+                  solidHeader = TRUE,
                 selectInput("xfact","X Factor:",
                             c("Income",
                               "Decade Growth Rate",
@@ -115,7 +268,8 @@ body <- dashboardBody(
                             width = 500,
                 )
               ),
-              box(
+              box(status = "primary",
+                  solidHeader = TRUE,
                 selectInput("yfact","Y Factor:",
                             c("No High School",
                               "High School",
@@ -124,7 +278,8 @@ body <- dashboardBody(
                             width = 500,
                 )
               ),
-              box(
+              box(status = "primary",
+                  solidHeader = TRUE,
                 selectInput("geo","State or County:",
                             c("State",
                               "County"),
@@ -138,19 +293,29 @@ body <- dashboardBody(
       fluidPage(
         h2(strong("Qualification at Rural and Urban level")),
         align = "center"),
-      box(plotOutput("mline"),
-          width = 15),
+      box(status = "primary",
+          solidHeader = TRUE,
+          collapsible = TRUE,
+        fluidRow(plotOutput("mline"),
+          width = 15)),
       h6("Note: 1 - most urban  9 - most rural"),
-      materialSwitch(inputId = "id", label = "Smooth?", status = "success")
-      ),
+      box(status = "primary",
+          solidHeader = TRUE,
+        materialSwitch(inputId = "id", label = "Smooth?", status = "success")
+      )),
     tabItem(
       tabName = "map",
       fluidPage(
         h1(strong("Educational distribution"),
            align = "center"),
-        box(plotOutput("sstate"),
-            width = 15),
-        box(
+        box(status = "primary",
+            solidHeader = TRUE,
+            collapsible = TRUE,
+          fluidRow(plotOutput("sstate"),
+            width = 15)
+          ),
+        box(status = "primary",
+            solidHeader = TRUE,
           selectInput("columns","Qualification:",
                       c("No High School",
                         "High School",
@@ -159,7 +324,8 @@ body <- dashboardBody(
                       width = 500,
           )
         ),
-        box(
+        box(status = "primary",
+            solidHeader = TRUE,
           selectInput("geography","State or County:",
                       c("State",
                         "County"),
@@ -172,10 +338,11 @@ body <- dashboardBody(
           fluidPage(
             h1(strong("Project Summary"),
                align = "center"),
-            img(src = "Summ.jpg",
+            fluidRow(img(src = "Summ.jpg",
                 height = 250,
                 width = 500,
-                style="display: block; margin-left: auto; margin-right: auto;"),
+                style="display: block; margin-left: auto; margin-right: auto;")
+                ),
             tags$br(),
             textOutput("text"),
             tags$br(),
